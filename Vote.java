@@ -120,7 +120,6 @@ public class Vote {
         }
     }
     
-    
 	public static void main(String[] args) {
 		Vote v = creerRandom();
 		v.afficherVote();

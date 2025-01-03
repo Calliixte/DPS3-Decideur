@@ -12,6 +12,7 @@ public class Vote {
 	ArrayList<String> etiquettes;
 	int totalVotant;
 	int estimBudj;
+	Choix choixGagnant;
 	
 	public Vote() {
 		lesChoix = new ArrayList<Choix>();
@@ -23,6 +24,17 @@ public class Vote {
         this.etiquettes = new ArrayList<>(v.etiquettes);
         this.totalVotant = v.totalVotant;
         this.estimBudj = v.estimBudj;
+    }
+    
+    public void setChoixGagnant() {
+    	Choix maxChoix = lesChoix.get(0);
+    	for(Choix ch : lesChoix) {
+    		if(ch.getPourcentage() > maxChoix.getPourcentage()) {
+    			maxChoix = ch;
+    		}
+    		
+    		choixGagnant = maxChoix;
+    	}
     }
 
 	public Vote(int idVote,int idVotant,int idGroupe) { //constructeur qui va recupere depuis l'API, ne fonctionne pas pr l'instant (pas parfaitement)
@@ -103,6 +115,8 @@ public class Vote {
         vote.totalVotant = 10 + random.nextInt(491); //total de votant entre 10 et 500
 
         vote.estimBudj = 1000 + random.nextInt(9001); //budget entre 1000 et 10000
+        
+        vote.setChoixGagnant();
 
         return vote;
     }

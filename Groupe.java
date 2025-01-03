@@ -23,7 +23,10 @@ public class Groupe {
 	    }
 	    this.BudgetAlloue = g.BudgetAlloue;
 	}
-
+	
+	public ArrayList<Vote> getListeVote(){
+		return votes;
+	}
 
 	public static ArrayList<Vote> creerListeVoteTest(int nbVote){
 		ArrayList<Vote> liste = new ArrayList<>();
@@ -32,6 +35,8 @@ public class Groupe {
 		}
 		return liste;
 	}
+	
+	
 	
 	public int getNbVotantsMajoritairesGroupe() { //renvoie le nombre de votes satisfaits si l'on choisit l'option majoritaire a chaque vote, à noter que cela ne compte pas des personnes mais bien des votes
 		/*

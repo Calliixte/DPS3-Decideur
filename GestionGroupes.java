@@ -45,8 +45,41 @@ public class GestionGroupes {
 	 * Potentiellement faire une version glouton de maxNbSatisfaits
 	 */
 
-	public static ArrayList<Vote> choisirDiversite(Groupe g) {
+	public static ArrayList<Vote> minimiserBudget(Groupe g, int nbVote){
 		/*
+		 * Algo glouton minimisant le budget tout en gardant une satisfaction moyenne au dessus de 50%
+		 * Ok alors j'ai des problèmes avec la satisfaction dans les votes dcp j'ai juste mis un nombre de vote 
+		 * mais c'est temporaire
+		 * 
+		 * En gros on a juste les pourcentages de vote mais pas la satisfaction,
+		 * Du coup en soi la satisfaction d'un vote ça serait ceux qui ont voté pour ce vote
+		 * Sauf que jsp comment faire pour les votes à choix multiple, ou ceux qui sont pas juste de la forme pour/contre*/
+		ArrayList<Vote> selecGlouton = new ArrayList<Vote>();
+		ArrayList<Vote> listeVote = g.getListeVote();
+		Vote minVote = listeVote.get(0);
+		
+		while(selecGlouton.size() < nbVote) {
+			for(Vote vote : listeVote) {
+				if(vote.estimBudj < minVote.estimBudj) {
+					minVote = vote;
+				}
+			}
+			
+			selecGlouton.add(minVote);
+		}
+		
+		return selecGlouton;
+	}
+	
+	public static int getStatisfactionMoyenne(ArrayList<Vote> listeVote) {
+		for(Vote vote : listeVote){
+			//Je suis perdu
+		}
+		return 0;
+	}
+	
+	public static ArrayList<Vote> choisirDiversite(Groupe g) {
+		/* Alice
 		 * Algorithme glouton : Cherche dans les votes du groupe un vote qui contient un sujet pas encore traité et le choisi si jamais il rentre dans le budget
 		 * aucune considération d'optimisation de budget ou de satisfaction n'est faite ici
 		 */

@@ -51,6 +51,7 @@ public class Vote {
 		
 		}catch(IOException e) {}
 	}
+	
 	public int nbVotantsMajoritaire() //renvoie le nombre de votants (approximativement) que réprésente la proposition majoritaire
 	{
 		double pourcentageMajoritaire = 0.0;
@@ -62,7 +63,7 @@ public class Vote {
 		
 		return (int) ((totalVotant / 100.0) * Math.round(pourcentageMajoritaire));
 	}
-
+	
     public static Vote creerRandom() {
         Vote vote = new Vote();
         Random random = new Random();

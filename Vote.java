@@ -8,20 +8,18 @@ import org.json.JSONObject;
 import java.util.Random;
 
 public class Vote {
-	ArrayList<String> lesChoix;
-	ArrayList<Double> choixFaits;
+	ArrayList<Choix> lesChoix;
 	ArrayList<String> etiquettes;
 	int totalVotant;
 	int estimBudj;
+	
 	public Vote() {
-		lesChoix = new ArrayList<String>();
-		choixFaits = new ArrayList<Double>();
+		lesChoix = new ArrayList<Choix>();
 		etiquettes = new ArrayList<String>();
 		totalVotant=0;
 	}
     public Vote(Vote v) {
         this.lesChoix = new ArrayList<>(v.lesChoix);
-        this.choixFaits = new ArrayList<>(v.choixFaits);
         this.etiquettes = new ArrayList<>(v.etiquettes);
         this.totalVotant = v.totalVotant;
         this.estimBudj = v.estimBudj;
@@ -55,9 +53,9 @@ public class Vote {
 	public int nbVotantsMajoritaire() //renvoie le nombre de votants (approximativement) que réprésente la proposition majoritaire
 	{
 		double pourcentageMajoritaire = 0.0;
-		for (double pr : choixFaits) {
-			if(pr>pourcentageMajoritaire) {
-				pourcentageMajoritaire=pr;
+		for (Choix ch : lesChoix) {
+			if(ch.getPourcentage() > pourcentageMajoritaire) {
+				pourcentageMajoritaire=ch.getPourcentage();
 			}
 		}
 		
@@ -68,13 +66,27 @@ public class Vote {
         Vote vote = new Vote();
         Random random = new Random();
         ArrayList<String> etiquettesPossibles = new ArrayList<>(Arrays.asList("Urgent","Information","Changement","Debat","Culture"));
-
+        
         // Générer un nombre aléatoire de choix (entre 2 et 5 par exemple)
         int nombreDeChoix = 2 + random.nextInt(4);
         int nbEtiquettes = 1 + random.nextInt(3); // entre 1 et 3 etiquettes
+        
+        double totalPourcentage = 100.0;
         // Remplir lesChoix avec "a", "b", "c", ...
         for (int i = 0; i < nombreDeChoix; i++) {
-            vote.lesChoix.add(Character.toString((char) ('a' + i)));
+        	double pourcentage;
+            if (i == nombreDeChoix - 1) {
+                // Assigner le reste au dernier choix pour garantir un total de 100%
+                pourcentage = totalPourcentage;
+            } else {
+                pourcentage = Math.round(random.nextDouble() * totalPourcentage * 100.0) / 100.0;
+                totalPourcentage -= pourcentage;
+            }
+            
+            String nom = Character.toString((char) ('a' + i));
+        	Choix c = new Choix(nom, pourcentage);
+        	
+            vote.lesChoix.add(c);
         }
     	int etiquetteChoisie = -1;
     	ArrayList<Integer> dejaChoisi = new ArrayList<>(Arrays.asList(-1)); //on met -1 dedans pour declencher le while directement
@@ -87,18 +99,6 @@ public class Vote {
         }
 
         // Générer des pourcentages aléatoires pour les choix
-        double totalPourcentage = 100.0;
-        for (int i = 0; i < nombreDeChoix; i++) {
-            double pourcentage;
-            if (i == nombreDeChoix - 1) {
-                // Assigner le reste au dernier choix pour garantir un total de 100%
-                pourcentage = totalPourcentage;
-            } else {
-                pourcentage = Math.round(random.nextDouble() * totalPourcentage * 100.0) / 100.0;
-                totalPourcentage -= pourcentage;
-            }
-            vote.choixFaits.add(pourcentage);
-        }
 
         vote.totalVotant = 10 + random.nextInt(491); //total de votant entre 10 et 500
 
@@ -117,7 +117,7 @@ public class Vote {
         }
         System.out.println("Choix et Pourcentages:");
         for (int i = 0; i < lesChoix.size(); i++) {
-            System.out.println(lesChoix.get(i) + " : " + choixFaits.get(i) + "%");
+            System.out.println(lesChoix.get(i));
         }
     }
     

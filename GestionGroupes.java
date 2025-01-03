@@ -78,7 +78,7 @@ public class GestionGroupes {
 	}
 
 	public static void main(String[] args) {
-		System.out.println("testGit");
+		System.out.println("testAppliGit");
 		Groupe g = new Groupe();
 		for (int i=0; i <g.votes.size();i++) {
 			System.out.println(i);

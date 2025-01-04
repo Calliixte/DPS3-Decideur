@@ -1,6 +1,10 @@
 package algos;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -125,6 +129,30 @@ public class Vote {
             System.out.println(lesChoix.get(i));
         }
     }
+    
+    public void updateBudget(int nvBudj) throws IOException {
+        String baseUrl = "https://projets.iut-orsay.fr/saes3-vjacqu3/classePHP/rest/PUT.php";
+        String urlString = baseUrl + "?classe=vote&id=1&estimBudj=" + nvBudj;
+        /*idTemporaire apres on mettra -> */
+        /*this.idVote à implémenter dans la classe mais pour l'instant l'api marche pas donc autant ne pas se faire chier*/; 
+        URL url = new URL(urlString);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        
+        connection.setRequestMethod("PUT");  // Utilisation correcte de la méthode PUT
+        
+        // Vérification du code de réponse HTTP pour du debug
+        int responseCode = connection.getResponseCode();
+        System.out.println("Response Code : " + responseCode);
+
+        if (responseCode == HttpURLConnection.HTTP_OK) {  // Vérification du code 200 OK
+            System.out.println("Budget modifié !");
+        } else {
+            System.out.println("Échec de la modification du budget, code : " + responseCode);
+        }
+
+        connection.disconnect();
+    }
+
     
 	public static void main(String[] args) {
 		Vote v = creerRandom();

@@ -45,37 +45,136 @@ public class GestionGroupes {
 	 * Potentiellement faire une version glouton de maxNbSatisfaits
 	 */
 
-	public static ArrayList<Vote> minimiserBudget(Groupe g, int nbVote){
+	
+	public static ArrayList<Vote> satisfactionParSeuil(Groupe g, double seuil){
 		/*
-		 * Algo glouton minimisant le budget tout en gardant une satisfaction moyenne au dessus de 50%
-		 * Ok alors j'ai des problèmes avec la satisfaction dans les votes dcp j'ai juste mis un nombre de vote 
-		 * mais c'est temporaire
+		 * Algo glouton gardant une satisfaction moyenne au dessus d'un seuil en pourcentage donné en paramètre
+		 * tout en minimisant le budget
 		 * 
-		 * En gros on a juste les pourcentages de vote mais pas la satisfaction,
-		 * Du coup en soi la satisfaction d'un vote ça serait ceux qui ont voté pour ce vote
-		 * Sauf que jsp comment faire pour les votes à choix multiple, ou ceux qui sont pas juste de la forme pour/contre*/
+		 * On définit la satisfaction comme le pourcentage de gens ayant voté pour le choix gagnant.
+		 * On considère qu'en acceptant le vote dont le choix gagnant a été choisi par le plus de monde, 
+		 * on maximisera le nombre de gens satisfait.
+		 * 
+		 * la moyenne de satisfaction est le critère prioriataire : si un vote a le budget minimum mais n'est pas au dessus du seuil il sera ignoré
+		 */
+		
 		ArrayList<Vote> selecGlouton = new ArrayList<Vote>();
 		ArrayList<Vote> listeVote = g.getListeVote();
-		Vote minVote = listeVote.get(0);
-		
-		while(selecGlouton.size() < nbVote) {
-			for(Vote vote : listeVote) {
-				if(vote.estimBudj < minVote.estimBudj) {
-					minVote = vote;
-				}
+		while(listeVote.size() > 0){
+			int idMinVote = idMinBudget(listeVote);
+			
+			if(testSatisfactionMoyenne(selecGlouton,listeVote.get(idMinVote), seuil)) //On verifie que la moyenne reste au dessus du seuil (critère prioritaire)
+			{
+				System.out.println("accepté");
+				selecGlouton.add(listeVote.get(idMinVote));
 			}
 			
-			selecGlouton.add(minVote);
+			listeVote.remove(idMinVote);
 		}
+		
+		System.out.println("final : " + getSatisfactionMoyenne(selecGlouton));
+		System.out.println("final : " + getSumBudget(selecGlouton));
 		
 		return selecGlouton;
 	}
 	
-	public static int getStatisfactionMoyenne(ArrayList<Vote> listeVote) {
-		for(Vote vote : listeVote){
-			//Je suis perdu
+	public static ArrayList<Vote> minimiserBudget(Groupe g, double seuil){
+		/*
+		 * Algo glouton minimisant le budget tout en gardant une satisfaction moyenne 
+		 * au dessus d'un seuil en pourcentage donné en paramètre
+		 * 
+		 * On définit la satisfaction comme le pourcentage de gens ayant voté pour le choix gagnant.
+		 * On considère qu'en acceptant le vote dont le choix gagnant a été choisi par le plus de monde, 
+		 * on maximisera le nombre de gens satisfait.
+		 * 
+		 * le budget est le critère prioriataire : si un vote est au dessus du seuil mais n'a pas le budget minimum il sera ignoré
+		 */
+		
+		ArrayList<Vote> selecGlouton = new ArrayList<Vote>();
+		ArrayList<Vote> listeVote = g.getListeVote();
+		
+		while(listeVote.size() > 0){
+			int idMaxSat = -1;
+			
+			for(int i=0; i < listeVote.size(); i++) {
+				if(testSatisfactionMoyenne(selecGlouton,listeVote.get(i), seuil)) //On prend la première proposition qui reste au dessus du seuil
+				{ 
+					idMaxSat = i;
+					break;
+				}
+			}
+			
+			if(idMaxSat == -1) {
+				idMaxSat = idMaxSatisfaction(listeVote);
+			}
+			
+			double minBudget = listeVote.get(idMinBudget(listeVote)).estimBudj;
+			
+			if(listeVote.get(idMaxSat).estimBudj == minBudget) //On vérifie que c'est bien le budget minimum (critère prioritaire)
+			{
+				System.out.println("accepté");
+				selecGlouton.add(listeVote.get(idMaxSat));
+			}
+			
+			listeVote.remove(idMaxSat);
 		}
-		return 0;
+		
+		System.out.println("final : " + getSatisfactionMoyenne(selecGlouton));
+		System.out.println("final : " + getSumBudget(selecGlouton));
+		
+		return selecGlouton;
+	}
+	
+	public static int idMinBudget(ArrayList<Vote> listeVote) {
+		int idMin = 0;
+		
+		for(int i=0; i < listeVote.size(); i++) {
+			if(listeVote.get(i).estimBudj < listeVote.get(idMin).estimBudj) //On prend la proposition au budget minimum
+			{ 
+				idMin = i;
+			}
+		}
+		
+		return idMin;
+	}
+	
+	public static int idMaxSatisfaction(ArrayList<Vote> listeVote) {
+		int max = 0;
+		for(int i=0; i < listeVote.size(); i++){
+			if(listeVote.get(i).choixGagnant.getPourcentage() > listeVote.get(max).choixGagnant.getPourcentage()) //On prend la proposition à la satisfaction maximum (celle avec le plus grand pourcentage de vote gagnant)
+			{
+				max = i;
+			}
+		}
+		
+		return max;
+	}
+	
+	public static boolean testSatisfactionMoyenne(ArrayList<Vote> listeVote, Vote test, double seuil) {
+		double moyenne = 0;
+		for(Vote vote : listeVote){
+			moyenne += vote.choixGagnant.getPourcentage();
+		}
+		moyenne += test.choixGagnant.getPourcentage();
+		return	(moyenne/(listeVote.size() + 1)) >= seuil;
+	}
+	
+	public static double getSatisfactionMoyenne(ArrayList<Vote> listeVote) {
+		double moyenne = 0;
+		for(Vote vote : listeVote){
+			moyenne += vote.choixGagnant.getPourcentage();
+		}
+		
+		return	moyenne/listeVote.size();
+	}
+	
+	public static int getSumBudget(ArrayList<Vote> listeVote) {
+		int sum = 0;
+		for(Vote vote : listeVote){
+			sum += vote.estimBudj;
+		}
+		
+		return	sum;
 	}
 	
 	public static ArrayList<Vote> choisirDiversite(Groupe g) {
@@ -122,7 +221,7 @@ public class GestionGroupes {
 		System.out.println("-----------------------------------");
 		
 		ArrayList<Vote> a = new ArrayList<>();
-		a = choisirDiversite(g);
+		a = minimiserBudget(g,80);
 		for(int i =0;i<a.size();i++) {
 			a.get(i).afficherVote();
 		}

@@ -6,7 +6,7 @@ public class MinBudget {
 	/*
 	 * author : A.Sandoz
 	 */
-	public static ArrayList<Vote> minimiserBudget(Groupe g, double seuil){
+	public static ArrayList<Vote> satisfactionMoyenneGlouton(Groupe g, double seuil){
 		/*
 		 * A.Sandoz
 		 * Algo glouton minimisant le budget tout en gardant une satisfaction moyenne 
@@ -34,9 +34,6 @@ public class MinBudget {
 			listeVote.remove(idMinVote); //On retire le vote testé
 		}
 		
-		System.out.println("final : " + getSatisfactionMoyenne(selecGlouton)); //Debug
-		System.out.println("final : " + getSumBudget(selecGlouton));
-		
 		return selecGlouton;
 	}
 	
@@ -54,6 +51,46 @@ public class MinBudget {
 		}
 		
 		return idMin;
+	}
+	
+	public static ArrayList<Vote> satisfactionMoyenneBruteForce(ArrayList<Vote> listeVote, double seuil) {
+		/*
+		 * A.Sandoz
+		 * Algo force brute minimisant le budget tout en gardant une satisfaction moyenne 
+		 * au dessus d'un seuil en pourcentage donné en paramètre
+		 *  
+		 * 
+		 * On définit la satisfaction comme le pourcentage de gens ayant voté pour le choix gagnant.
+		 * On considère qu'en acceptant le vote dont le choix gagnant a été choisi par le plus de monde, 
+		 * on maximisera le nombre de gens satisfait.
+		 * 
+		 * la moyenne de satisfaction est le critère prioriataire : si un vote a le budget minimum mais n'est pas au dessus du seuil il sera ignoré
+		 */
+		
+		if(listeVote.size() <= 0) {
+			return new ArrayList<Vote>();
+		}
+		
+		int idMin = idMinBudget(listeVote);
+		
+		ArrayList<Vote> copy = new ArrayList<Vote>(listeVote);
+		copy.remove(idMin);
+		
+		ArrayList<Vote> choix1 = satisfactionMoyenneBruteForce(copy, seuil);
+		ArrayList<Vote> choix2 = new ArrayList<Vote>();
+		
+		if(testSatisfactionMoyenne(choix1, listeVote.get(idMin), seuil)) {
+			choix2.add(listeVote.get(idMin));
+			choix2.addAll(choix1);
+		}else {
+			return choix1;
+		}
+
+		if(getSatisfactionMoyenne(choix1) > getSatisfactionMoyenne(choix2)) {
+			return choix1;
+		} else {
+			return choix2;
+		}
 	}
 	
 	public static int idMaxSatisfaction(ArrayList<Vote> listeVote) {
@@ -107,3 +144,42 @@ public class MinBudget {
 		return	sum;
 	}
 }
+
+
+
+
+//public static ArrayList<Vote> satisfactionMoyenneBruteForce(ArrayList<Vote> listeVote, double seuil) {
+//	/*
+//	 * A.Sandoz
+//	 * Algo force brute minimisant le budget tout en gardant une satisfaction moyenne 
+//	 * au dessus d'un seuil en pourcentage donné en paramètre
+//	 *  
+//	 * 
+//	 * On définit la satisfaction comme le pourcentage de gens ayant voté pour le choix gagnant.
+//	 * On considère qu'en acceptant le vote dont le choix gagnant a été choisi par le plus de monde, 
+//	 * on maximisera le nombre de gens satisfait.
+//	 * 
+//	 * la moyenne de satisfaction est le critère prioriataire : si un vote a le budget minimum mais n'est pas au dessus du seuil il sera ignoré
+//	 */
+//	
+//	if(listeVote.size() <= 0) {
+//		return new ArrayList<Vote>();
+//	}
+//	
+//	int idMin = idMinBudget(listeVote);
+//	
+//	ArrayList<Vote> copy = new ArrayList<Vote>(listeVote);
+//	copy.remove(idMin);
+//	
+//	ArrayList<Vote> choix1 = satisfactionMoyenneBruteForce(copy, seuil);
+//	ArrayList<Vote> choix2 = new ArrayList<Vote>();
+//	
+//	choix2.add(listeVote.get(idMin));
+//	choix2.addAll(satisfactionMoyenneBruteForce(copy, seuil));
+//	
+//	if(getSatisfactionMoyenne(choix1) > getSatisfactionMoyenne(choix2)) {
+//		return choix1;
+//	} else {
+//		return choix2;
+//	}
+//}

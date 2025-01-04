@@ -11,43 +11,116 @@ public class GestionGroupes {
 	 *et ça nous fera du bonus je pense. En tout cas important :  ! faites plusieurs algos pour le meme mode de decision !
 	 * 
 	 */
-	
-	
+	public static ArrayList<Vote> maxSatisfaits(Groupe g){
+		/*
+		 * A.Baco
+		 * Glouton :
+		 * Algorithme extremement primaire : prends des votes jusque à ne plus pouvoir vis à vis du budget 
+		 */
+		ArrayList<Vote> votesChoisis = new ArrayList<>();
+		ArrayList<Vote> listeVote = new ArrayList<Vote>(g.getListeVote());
+		int budgetRestant = g.BudgetAlloue; //copie pour pouvoire suivre l'evolution du budget
+				while(listeVote.size() > 0){	
+					Vote v = listeVote.remove(0);
+					if(budgetRestant-v.estimBudj>=0) { //si la voix gagnante est au dessus du seuil et que le vote rentre dans le budj
+						votesChoisis.add(v);//On l'ajoute au result
+						budgetRestant-=v.estimBudj; //on update le budj restant
+					}
+				}
+				
+				System.out.println("final : " + getSatisfactionMoyenne(votesChoisis)); //Debug
+				System.out.println("final : " + getSumBudget(votesChoisis));
+				
+				return votesChoisis;
+	}
+	public static ArrayList<Vote> maxNbSatisfaitsSeuil(Groupe g, double seuil){
+		/*
+		 * A.Baco
+		 * Glouton :
+		 * Selectionne des votes sans regard vis à vis du budget en vérifiant simplement que la proposition gagnante du vote
+		 * dépasse le seuil donné dans la fonction
+		 */
+		ArrayList<Vote> votesSatisfaisants = new ArrayList<>();
+		ArrayList<Vote> listeVote = new ArrayList<Vote>(g.getListeVote());
+		int budgetRestant = g.BudgetAlloue; //copie pour pouvoire suivre l'evolution du budget
+				while(listeVote.size() > 0){	
+					Vote v = listeVote.remove(0);
+					if(v.choixGagnant.getPourcentage()>=seuil && budgetRestant-v.estimBudj>=0) { //si la voix gagnante est au dessus du seuil et que le vote rentre dans le budj
+						votesSatisfaisants.add(v);//On l'ajoute au result
+						budgetRestant-=v.estimBudj; //on update le budj restant
+					}
+				}
+				
+				System.out.println("final : " + getSatisfactionMoyenne(votesSatisfaisants)); //Debug
+				System.out.println("final : " + getSumBudget(votesSatisfaisants));
+				
+				return votesSatisfaisants;
+	}
 	public static ArrayList<Vote> maxNbSatisfaits(Groupe g) {
-		//du coup la flm mais je décris le fonctionnement avec des commentaires
+		/*
+		 * A.Baco
+		 * Force Brute : 
+		 * Maximise le nombre de votes satisfaits tout en respectant la contrainte de budget
+		 */
 		
 	    // Condition d'arrêt : groupe vide ou budget épuisé
-	    // si (groupe.isEmpty() || budget <= 0)
-	    //    return new ArrayList<>();
+		if(g.votes.isEmpty() || g.votes.size()<=0 || g.BudgetAlloue<=0) {
+			return new ArrayList<Vote>();
+		}
 		ArrayList<Vote> choixCas1 = new ArrayList<>();
 		ArrayList<Vote> choixCas2 = new ArrayList<>();
+		Groupe gCopie = new Groupe(g);
 		//on prend le groupe de base et vraiment avec les pointeurs ça risque de faire de la merde donc faut en faire au moins une copie 
 		
-		//----Cas 1 
+		Vote premierVote = gCopie.votes.remove(0);
+		
+		//----Cas 1
 		//on pop le premier vote no matter what 
-		//on relance l'algo avec ce truc 
-		//et choixCas1.add(maxNbSatisfaits(groupe - le premier vote))
+		//on relance l'algo avec ce truc
+		choixCas1.addAll(maxNbSatisfaits(gCopie));
 		
 		//----Cas 2 
 		//si le premier vote rentre dans le budget alors choixCas2.add(premier vote)
 		//et choixCas2.add(maxNbSatisfaits(groupe - le premier vote))
 		//s'il rentre pas on relance aussi sans le premier vote juste y'aura pas le premier vote avant
+		if(premierVote.estimBudj<g.BudgetAlloue) {
+			choixCas2.add(premierVote);
+			gCopie.BudgetAlloue-=premierVote.estimBudj;
+			choixCas2.addAll(maxNbSatisfaits(gCopie));
+		}else {
+			choixCas2.addAll(maxNbSatisfaits(gCopie));
+		}
 		
 		//----Comparaison des deux 
-		//on a deux arrayList : choixCas1 et choixCas2
-		//on aura fait une fonction : ArrayList<Vote>.totalNbSatisfaitsMajoritaire()
+		//on a deux groupe : choixCas1 et choixCas2
 		//on return le cas1 ou 2 en fonction de celui qui a le plus grand nombre de satisfaits
+		int totalSatis1=0;
+		int totalSatis2=0;
+		for(Vote v : choixCas1) {
+			if(v.choixGagnant == null) {
+				v.setChoixGagnant();
+			}
+			totalSatis1+=v.nbVotantsGagnant();
+		}
+		for(Vote v : choixCas2) {
+			if(v.choixGagnant == null) {
+				v.setChoixGagnant();
+			}
+			totalSatis2+=v.nbVotantsGagnant();
 		
-		
-		return null;
-	}
-	/*
-	 * Potentiellement faire une version glouton de maxNbSatisfaits
-	 */
 
+		}
+		if(totalSatis1>totalSatis2) {
+			return choixCas1;
+		}else {
+			return choixCas2;
+		}
+		
+	}
 	
 	public static ArrayList<Vote> minimiserBudget(Groupe g, double seuil){
 		/*
+		 * A.Sandoz
 		 * Algo glouton minimisant le budget tout en gardant une satisfaction moyenne 
 		 * au dessus d'un seuil en pourcentage donné en paramètre
 		 *  
@@ -80,6 +153,9 @@ public class GestionGroupes {
 	}
 	
 	public static int idMinBudget(ArrayList<Vote> listeVote) {
+		/*
+		 * A.Sandoz
+		 */
 		int idMin = 0;
 		
 		for(int i=0; i < listeVote.size(); i++) {
@@ -93,6 +169,9 @@ public class GestionGroupes {
 	}
 	
 	public static int idMaxSatisfaction(ArrayList<Vote> listeVote) {
+		/*
+		 * A.Sandoz
+		 */
 		int max = 0;
 		for(int i=0; i < listeVote.size(); i++){
 			if(listeVote.get(i).choixGagnant.getPourcentage() > listeVote.get(max).choixGagnant.getPourcentage()) //On prend la proposition à la satisfaction maximum (celle avec le plus grand pourcentage de vote gagnant)
@@ -105,6 +184,9 @@ public class GestionGroupes {
 	}
 	
 	public static boolean testSatisfactionMoyenne(ArrayList<Vote> listeVote, Vote test, double seuil) {
+		/*
+		 * A.Sandoz
+		 */
 		double moyenne = 0;
 		for(Vote vote : listeVote){
 			moyenne += vote.choixGagnant.getPourcentage();
@@ -114,6 +196,9 @@ public class GestionGroupes {
 	}
 	
 	public static double getSatisfactionMoyenne(ArrayList<Vote> listeVote) {
+		/*
+		 * A.Sandoz
+		 */
 		double moyenne = 0;
 		for(Vote vote : listeVote){
 			moyenne += vote.choixGagnant.getPourcentage();
@@ -123,6 +208,9 @@ public class GestionGroupes {
 	}
 	
 	public static int getSumBudget(ArrayList<Vote> listeVote) {
+		/*
+		 * A.Sandoz
+		 */
 		int sum = 0;
 		for(Vote vote : listeVote){
 			sum += vote.estimBudj;
@@ -132,7 +220,7 @@ public class GestionGroupes {
 	}
 	
 	public static ArrayList<Vote> choisirDiversite(Groupe g) {
-		/* Alice
+		/* A.Baco
 		 * Algorithme glouton : Cherche dans les votes du groupe un vote qui contient un sujet pas encore traité et le choisi si jamais il rentre dans le budget
 		 * aucune considération d'optimisation de budget ou de satisfaction n'est faite ici
 		 */
@@ -164,7 +252,9 @@ public class GestionGroupes {
 	}
 
 	public static void main(String[] args) {
-		System.out.println("testAppliGit");
+		/*
+		 * J.Ava
+		 */
 		Groupe g = new Groupe();
 		for (int i=0; i <g.votes.size();i++) {
 			System.out.println(i);
@@ -175,9 +265,16 @@ public class GestionGroupes {
 		System.out.println("-----------------------------------");
 		
 		ArrayList<Vote> a = new ArrayList<>();
-		a = minimiserBudget(g,80);
+		a = maxNbSatisfaitsSeuil(g,80);
+		//a = maxNbSatisfaits(g);
+		int totalSatis = 0;
+		int totalVotes = 0;
 		for(int i =0;i<a.size();i++) {
 			a.get(i).afficherVote();
+			totalSatis+= a.get(i).nbVotantsGagnant();
+			totalVotes+=a.get(i).totalVotant;
 		}
+		System.out.println("total Votes satisfaits : " + totalSatis);
+		System.out.println("total Votants votes choisis : " + totalVotes);
 	}
 }

@@ -41,13 +41,11 @@ public class Vote {
 		try {
 		JSONObject j = FetchJSON.recupJSONVote(idVote, idVotant,idGroupe);
         System.out.println("keyset : " + j.keySet());
-        for (String key : j.keySet()) {
-        	  Object value = j.get(key);
-        	  System.out.println(key.substring(6));
-        	  if(key.substring(6)=="listeReactions") {
-        		  break;
-        	  }
-        }
+        System.out.println(j.toString());
+//        for (String key : j.keySet()) {
+//        	  Object value = j.get(key);
+//        	  System.out.println(key.substring(6));
+//        }
         
 //		ArrayList<JSONObject>listeBizarre = (ArrayList<JSONObject>) j.get(" Vote choixVote");
 //		for(JSONObject a : listeBizarre) {
@@ -60,18 +58,11 @@ public class Vote {
 		
 		
 		}catch(IOException e) {}
-	}
+	} 
 	
-	public int nbVotantsMajoritaire() //renvoie le nombre de votants (approximativement) que réprésente la proposition majoritaire
+	public int nbVotantsGagnant() //renvoie le nombre de votants (approximativement) que réprésente la proposition majoritaire
 	{
-		double pourcentageMajoritaire = 0.0;
-		for (Choix ch : lesChoix) {
-			if(ch.getPourcentage() > pourcentageMajoritaire) {
-				pourcentageMajoritaire=ch.getPourcentage();
-			}
-		}
-		
-		return (int) ((totalVotant / 100.0) * Math.round(pourcentageMajoritaire));
+		return (int) ((totalVotant / 100.0) * Math.round(choixGagnant.getPourcentage()));
 	}
 	
     public static Vote creerRandom() {
@@ -138,7 +129,7 @@ public class Vote {
 	public static void main(String[] args) {
 		Vote v = creerRandom();
 		v.afficherVote();
-		System.out.println(v.nbVotantsMajoritaire());
+		System.out.println(v.nbVotantsGagnant());
 
 	}
 }

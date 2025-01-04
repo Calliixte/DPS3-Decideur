@@ -10,7 +10,7 @@ public class Groupe {
 	
 	public Groupe() {
 		Random rnd = new Random();
-		BudgetAlloue = 1000 + rnd.nextInt(99001); //budget entre 1 000 et 100 000
+		BudgetAlloue = 1000 + rnd.nextInt(90001); //budget entre 1 000 et 100 000
 		votes = creerListeVoteTest(4+rnd.nextInt(8)); //entre 4 et 11 votes dans le groupe	
 	}
 	public Groupe(Groupe g) { 
@@ -38,7 +38,7 @@ public class Groupe {
 	
 	
 	
-	public int getNbVotantsMajoritairesGroupe() { //renvoie le nombre de votes satisfaits si l'on choisit l'option majoritaire a chaque vote, à noter que cela ne compte pas des personnes mais bien des votes
+	public int getNbVotantsGagnant() { //renvoie le nombre de votes satisfaits si l'on choisit l'option majoritaire a chaque vote, à noter que cela ne compte pas des personnes mais bien des votes
 		/*
 		 * Commentaire pour mes camarades dev et meme pour moi (s'il est encore la pendant la présentation c'est un peu gênant)
 		 * si on veut gerer des algos d'opti sur des utilisateurs specifiques/si on veut satisfaire chaque utilisateur au lieu de satisfaires des votes
@@ -55,7 +55,7 @@ public class Groupe {
 		 */
 		int total=0;
 		for (Vote v : votes) {
-			total+=v.nbVotantsMajoritaire();
+			total+=v.nbVotantsGagnant();
 		}
 		return total;
 	}

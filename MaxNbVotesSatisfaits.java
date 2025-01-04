@@ -51,6 +51,25 @@ public class MaxNbVotesSatisfaits {
 				
 				return votesSatisfaisants;
 	}
+	
+	
+	
+	
+	
+	/*
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * CHANGER LE BRUTEFORCE POUR QU'IL UTILISE LIST AU LIEU DE ARRAYLIST,
+	 * CEST DEMANDE DANS LE SUJET
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
 	public static ArrayList<Vote> bruteForce(Groupe g) {
 		/*
 		 * A.Baco

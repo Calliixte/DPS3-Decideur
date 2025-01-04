@@ -26,6 +26,8 @@ public class GestionGroupes {
 		ArrayList<Vote> a = new ArrayList<>();
 		a = MaxNbVotesSatisfaits.gloutonSeuil(g,80);
 		//a = MaxNbVotesSatisfaits.bruteForce(g);
+		ArrayList<String> t = new ArrayList<>();
+		a= Diversite.bruteForceExclusif(g,t);
 		int totalSatis = 0;
 		int totalVotes = 0;
 		for(int i =0;i<a.size();i++) {

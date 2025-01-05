@@ -40,17 +40,32 @@ public class GestionGroupes {
 		
 		System.out.println("-----------------------------------");
 		
-		a = MinBudget.satisfactionMoyenneBruteForce(g.getListeVote(),80);
+		a = MinBudget.satisfactionMoyenneBruteForce(g.getListeVote(),60);
 		
 		System.out.println("brute force");
 		System.out.println(MinBudget.getSatisfactionMoyenne(a));
 		System.out.println(MinBudget.getSumBudget(a));
 		
-		a = MinBudget.satisfactionMoyenneGlouton(g,80);
+		a = MinBudget.satisfactionMoyenneGlouton(g,60);
 		
 		System.out.println("glouton");
 		System.out.println(MinBudget.getSatisfactionMoyenne(a));
 		System.out.println(MinBudget.getSumBudget(a));
-
+		
+		a = MinBudget.minimiserBudgetBruteForce(g.getListeVote(), 15000);
+		
+		System.out.println("minimiser brute force");
+		System.out.println(MinBudget.getSatisfactionMoyenne(a));
+		System.out.println(MinBudget.getSumBudget(a));
+		
+		a = MinBudget.minimiserBudgetGlouton(g, 15000);
+		
+		System.out.println("minimiser glouton");
+		System.out.println(MinBudget.getSatisfactionMoyenne(a));
+		System.out.println(MinBudget.getSumBudget(a));
+		
+		for(int i =0;i<a.size();i++) {
+			a.get(i).afficherVote();
+		}
 	}
 }

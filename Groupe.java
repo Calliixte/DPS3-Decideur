@@ -5,6 +5,7 @@ import java.util.Random;
 
 
 public class Groupe {
+	private String nomGroupe; 
 	ArrayList<Vote> votes;
 	int BudgetAlloue;
 	
@@ -13,6 +14,11 @@ public class Groupe {
 		BudgetAlloue = 1000 + rnd.nextInt(90001); //budget entre 1 000 et 100 000
 		votes = creerListeVoteTest(4+rnd.nextInt(8)); //entre 4 et 11 votes dans le groupe	
 	}
+
+	public String getNomGroupe() {
+		return nomGroupe;
+	}
+
 	public Groupe(Groupe g) { 
 	/*
 	 * On definit un constructeur copiant les données d'un objet vote pour éviter les problemes de références dans la récursion

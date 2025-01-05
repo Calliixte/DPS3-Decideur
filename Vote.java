@@ -14,6 +14,7 @@ import java.util.Random;
 public class Vote {
 	ArrayList<Choix> lesChoix;
 	ArrayList<String> etiquettes;
+	int idVote;
 	int totalVotant;
 	int estimBudj;
 	Choix choixGagnant;
@@ -112,7 +113,8 @@ public class Vote {
         vote.estimBudj = 1000 + random.nextInt(9001); //budget entre 1000 et 10000
         
         vote.setChoixGagnant();
-
+        
+        vote.idVote=-1;
         return vote;
     }
     
@@ -131,8 +133,11 @@ public class Vote {
     }
     
     public void updateBudget(int nvBudj) throws IOException {
+    	if(idVote==-1) {
+    		throw new IOException("Ce vote est généré aléatoirement, vous ne pouvez pas le modifier dans la BD");
+    	}
         String baseUrl = "https://projets.iut-orsay.fr/saes3-vjacqu3/classePHP/rest/PUT.php";
-        String urlString = baseUrl + "?classe=vote&id=1&estimBudj=" + nvBudj;
+        String urlString = baseUrl + "?table=Vote&idVote="+ idVote +"&evalBudget=" + nvBudj;
         /*idTemporaire apres on mettra -> */
         /*this.idVote à implémenter dans la classe mais pour l'instant l'api marche pas donc autant ne pas se faire chier*/; 
         URL url = new URL(urlString);

@@ -1,6 +1,7 @@
 package algos;
 
 import java.util.ArrayList;
+import java.io.IOException;
 
 public class GestionGroupes {
 
@@ -14,6 +15,19 @@ public class GestionGroupes {
 		/*
 		 * J.Ava
 		 */
+		Vote v = Vote.creerRandom();
+		try {
+		v.updateBudget(850);
+		}catch(IOException e) {
+			System.out.println(e);
+		}
+		try {
+		v.idVote=2;
+		v.updateBudget(900);
+		}catch(IOException e) {
+			System.out.println(e);
+		}
+		/*
 		Groupe g = new Groupe();
 		for (int i=0; i <g.votes.size();i++) {
 			System.out.println(i);
@@ -67,5 +81,6 @@ public class GestionGroupes {
 		for(int i =0;i<a.size();i++) {
 			a.get(i).afficherVote();
 		}
+		*/
 	}
 }

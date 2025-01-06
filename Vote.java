@@ -59,12 +59,18 @@ public class Vote {
             JSONArray choixArray = j.getJSONArray("choixVote");
             int totalVotes = 0;
             
-            // Remplir les choix et calculer le total des votes
+            
+            for(int i=0;i<choixArray.length();i++) { //calculer le total des votes
+            	JSONObject choixObj=choixArray.getJSONObject(i);
+            	int nbVotes = choixObj.getInt("nbVote");
+            	totalVotes += nbVotes;
+            }
+            // Remplir les choix
             for (int i = 0; i < choixArray.length(); i++) {
                 JSONObject choixObj = choixArray.getJSONObject(i);
                 String intitule = choixObj.getString("intitule");
                 int nbVotes = choixObj.getInt("nbVote");
-                totalVotes += nbVotes;
+                
 
                 double pourcentage = 0.0;
                 if (totalVotes > 0) {
@@ -188,7 +194,7 @@ public class Vote {
 
     
 	public static void main(String[] args) {
-		Vote v = new Vote(2,2,2);
+		Vote v = new Vote(6,2,2);
 		v.afficherVote();
 		Vote v2 = creerRandom();
 		System.out.println("----------------");

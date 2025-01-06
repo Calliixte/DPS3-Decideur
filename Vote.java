@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.Random;
 
@@ -42,28 +43,55 @@ public class Vote {
     	}
     }
 
-	public Vote(int idVote,int idVotant,int idGroupe) { //constructeur qui va recupere depuis l'API, ne fonctionne pas pr l'instant (pas parfaitement)
-		try {
-		JSONObject j = FetchJSON.recupJSONVote(idVote, idVotant,idGroupe);
-        System.out.println("keyset : " + j.keySet());
-        System.out.println(j.toString());
-//        for (String key : j.keySet()) {
-//        	  Object value = j.get(key);
-//        	  System.out.println(key.substring(6));
-//        }
-        
-//		ArrayList<JSONObject>listeBizarre = (ArrayList<JSONObject>) j.get(" Vote choixVote");
-//		for(JSONObject a : listeBizarre) {
-//            for (String key : a.keySet()) {
-//          	  Object value = a.get(key);
-//          	  System.out.println(key + ": " + value);
-//          }
-//		}
-		
-		
-		
-		}catch(IOException e) {}
-	} 
+    public Vote(int idVote, int idVotant, int idGroupe) {
+        try {
+            // Récupération du JSON via l'API
+            JSONObject j = FetchJSON.recupJSONVote(idVote, idVotant, idGroupe);
+            
+            // Remplir l'identifiant du vote
+            this.idVote = j.getInt("idVote");
+            
+            // Remplir l'estimation budgétaire
+            this.estimBudj = j.getInt("evalBudget");
+            
+            // Initialiser la liste des choix
+            this.lesChoix = new ArrayList<>();
+            JSONArray choixArray = j.getJSONArray("choixVote");
+            int totalVotes = 0;
+            
+            // Remplir les choix et calculer le total des votes
+            for (int i = 0; i < choixArray.length(); i++) {
+                JSONObject choixObj = choixArray.getJSONObject(i);
+                String intitule = choixObj.getString("intitule");
+                int nbVotes = choixObj.getInt("nbVote");
+                totalVotes += nbVotes;
+
+                double pourcentage = 0.0;
+                if (totalVotes > 0) {
+                    pourcentage = (nbVotes * 100.0) / totalVotes;
+                }
+                lesChoix.add(new Choix(intitule, pourcentage));
+            }
+            
+            // Remplir le total des votants
+            this.totalVotant = totalVotes;
+            
+            // Initialiser la liste des étiquettes
+            this.etiquettes = new ArrayList<>();
+            JSONArray etiquettesArray = j.getJSONArray("listeEtiquettes");
+            for (int i = 0; i < etiquettesArray.length(); i++) {
+                JSONObject etiquetteObj = etiquettesArray.getJSONObject(i);
+                String label = etiquetteObj.getString("labelEtiquette");
+                this.etiquettes.add(label);
+            }
+            
+            // Déterminer le choix gagnant
+            setChoixGagnant();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 	
 	public int nbVotantsGagnant() //renvoie le nombre de votants (approximativement) que réprésente la proposition majoritaire
 	{
@@ -160,9 +188,10 @@ public class Vote {
 
     
 	public static void main(String[] args) {
-		Vote v = creerRandom();
+		Vote v = new Vote(2,2,2);
 		v.afficherVote();
-		System.out.println(v.nbVotantsGagnant());
-
+		Vote v2 = creerRandom();
+		System.out.println("----------------");
+		v2.afficherVote();
 	}
 }

@@ -15,6 +15,20 @@ public class Groupe {
 		votes = creerListeVoteTest(4+rnd.nextInt(8)); //entre 4 et 11 votes dans le groupe	
 	}
 
+	public Groupe(String ng,int b,ArrayList<Vote> v) { /*Si l'on dispose déja d'une liste de votes, ce constructeur la prendra en charge*/
+		nomGroupe = ng;
+		BudgetAlloue=b;
+		votes = new ArrayList<>();
+		votes.addAll(v);
+	}
+	public Groupe(String ng,int b,Vote... lesVotes) {/*Ce constructeur prend autant de votes que voulu en parametre et crée l'objet groupe correspondant*/
+		nomGroupe = ng;
+		BudgetAlloue=b;
+		votes = new ArrayList<>();
+		for(Vote v : lesVotes) {
+			votes.add(v);
+		}
+	}
 	public String getNomGroupe() {
 		return nomGroupe;
 	}

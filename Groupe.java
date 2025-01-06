@@ -10,18 +10,39 @@ public class Groupe {
 	int BudgetAlloue;
 	
 	public Groupe() {
+		/*
+		 * Arguments : null
+		 * Sortie (constructeur donc pas vraiment mais si): groupe 
+		 * Contenu de la fonction : crée un groupe aléatoire avec un budget aléatoire, en donnant à ce groupe un nombre aléatoire de votes aléatoires
+		 */
 		Random rnd = new Random();
 		BudgetAlloue = 1000 + rnd.nextInt(90001); //budget entre 1 000 et 100 000
 		votes = creerListeVoteTest(4+rnd.nextInt(8)); //entre 4 et 11 votes dans le groupe	
 	}
 
 	public Groupe(String ng,int b,ArrayList<Vote> v) { /*Si l'on dispose déja d'une liste de votes, ce constructeur la prendra en charge*/
+		/*
+		 * Arguments : 
+		 * 		- ng une chaine de caracteres qui contiendra le nom du groupe a creer
+		 * 		- b un entier qui contient le budget du groupe à creer
+		 * 		- v une liste de votes qui est la liste des votes du groupe à creer
+		 * Sortie (constructeur donc pas vraiment mais si): groupe 
+		 * Contenu de la fonction : crée un groupe a partir des données passées en paramètres
+		 */
 		nomGroupe = ng;
 		BudgetAlloue=b;
 		votes = new ArrayList<>();
 		votes.addAll(v);
 	}
 	public Groupe(String ng,int b,Vote... lesVotes) {/*Ce constructeur prend autant de votes que voulu en parametre et crée l'objet groupe correspondant*/
+		/*
+		 * Arguments : 
+		 * 		- ng une chaine de caracteres qui contiendra le nom du groupe a creer
+		 * 		- b un entier qui contient le budget du groupe à creer
+		 * 		- lesVotes qui est une liste contenant un nombre inconnu de votes passés en parametres qui seront les votes du groupe, la fonction peut avoir 45 arguments si elle a 43 votes par exemple
+		 * Sortie (constructeur donc pas vraiment mais si): null 
+		 * Contenu de la fonction : crée un groupe a partir des données passées en paramètres
+		 */
 		nomGroupe = ng;
 		BudgetAlloue=b;
 		votes = new ArrayList<>();
@@ -29,14 +50,14 @@ public class Groupe {
 			votes.add(v);
 		}
 	}
-	public String getNomGroupe() {
-		return nomGroupe;
-	}
 
 	public Groupe(Groupe g) { 
-	/*
-	 * On definit un constructeur copiant les données d'un objet vote pour éviter les problemes de références dans la récursion
-	 */
+		/*
+		 * Arguments : 
+		 * 		- g un groupe dont on va copier les données
+		 * Sortie (constructeur donc pas vraiment une sortie): un nouveau groupe 
+		 * Contenu de la fonction : crée un groupe à partir d'un groupe passé en paramètres en copiant ses exactes données
+		 */
 	    this.votes = new ArrayList<>(); //Pour le constructeur de vote on faisait une copie avec directement la méthode de arraylist
 	    for (Vote vote : g.votes) { //ici la méthode reprendrait les references vers les votes donc on y prefere recreer les votes
 	        this.votes.add(new Vote(vote)); 
@@ -44,11 +65,35 @@ public class Groupe {
 	    this.BudgetAlloue = g.BudgetAlloue;
 	}
 	
+
+	
+	public String getNomGroupe() {
+		/*
+		 * Arguments : null 
+		 * Sortie : String -> le nom du groupe
+		 * Contenu de la fonction : getter pour nomGroupe
+		 */
+		return nomGroupe;
+	}
+	
 	public ArrayList<Vote> getListeVote(){
+		/*
+		 * Arguments : null 
+		 * Sortie : ArrayList<Vote> -> la liste des votes du groupe
+		 * Contenu de la fonction : getter pour votes
+		 */
 		return votes;
 	}
 
 	public static ArrayList<Vote> creerListeVoteTest(int nbVote){
+		/*
+		 * Arguments :
+		 * 		- nbVote -> un entier qui représente le nombre de votes à creer
+		 * Sortie : 
+		 * 		- ArrayList<Vote> la liste de votes crée par la fonction
+		 * Contenu de la fonction :
+		 * 		- une boucle qui tourne nbVote fois et creer autant de votes aléatoires qu'elle fait de tour, en les ajoutant à la liste à renvoyer à chaque fois 
+		 */
 		ArrayList<Vote> liste = new ArrayList<>();
 		for (int i=0;i<nbVote;i++) {
 			liste.add(Vote.creerRandom());
@@ -58,20 +103,13 @@ public class Groupe {
 	
 	
 	
-	public int getNbVotantsGagnant() { //renvoie le nombre de votes satisfaits si l'on choisit l'option majoritaire a chaque vote, à noter que cela ne compte pas des personnes mais bien des votes
+	public int getNbVotantsGagnant() {
 		/*
-		 * Commentaire pour mes camarades dev et meme pour moi (s'il est encore la pendant la présentation c'est un peu gênant)
-		 * si on veut gerer des algos d'opti sur des utilisateurs specifiques/si on veut satisfaire chaque utilisateur au lieu de satisfaires des votes
-		 *  (ce qui politiquement n'est pas l'idée du siecle je pense) vu qu'on a pas de requetes sql : 
-		 *  -on prend tous les utilisateurs
-		 *  -on prend tous les membres
-		 *  -pour le groupe concerné on dégage de la liste tous les utilisateurs qui ne sont pas membre de notre groupe
-		 *  -on prend nos choixVote du groupe
-		 *  -on degage de la liste chaque utilisateur qui n'a aucune occurence ou que des occurences de vote null (blanc) dans choixVote
-		 *  -enfin la on a une liste de tous les membres qui ont vote au moins une fois pour une option
-		 *  -dans notre algo faudra verifier a chaque fois si dans un vote y'a qqn qui a pas encore été satisfait et "cocher" la case de la personne qd c bon
-		 *  -ça sera tres couteux donc des trucs comme ça c'est du glouton je pense bien
-		 *  
+		 * Arguments :  null
+		 * Sortie : 
+		 * 		-un entier représentant le nombre de votes que représente le vote gagnant d'un vote
+		 * Contenu de la fonction : 
+		 * 		-renvoie le nombre de votes satisfaits si l'on choisit l'option majoritaire a chaque vote, à noter que cela ne compte pas des personnes mais bien des votes
 		 */
 		int total=0;
 		for (Vote v : votes) {

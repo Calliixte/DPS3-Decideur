@@ -21,29 +21,39 @@ public class Vote {
 	Choix choixGagnant;
 	
 	public Vote() {
+		/*
+		 * Arguments : null
+		 * Sortie (c'est un constructeur donc pas vraiment une sortie mais ça fait quelque chose):
+		 * 		-
+		 * Contenu de la fonction : crée un vote vide
+		 */
 		lesChoix = new ArrayList<Choix>();
 		etiquettes = new ArrayList<String>();
 		totalVotant=0;
 	}
     public Vote(Vote v) {
+		/*
+		 * Arguments :
+		 * 		- v -> un vote dont on veut copier le contenu
+		 * Sortie (c'est un constructeur donc pas vraiment une sortie mais ça fait quelque chose): 
+		 * 		- un nouveau vote qui a les valeurs du vote passé en parametre 
+		 * Contenu de la fonction : crée un vote a partir des valeurs du vote passé en paramètres
+		 */
         this.lesChoix = new ArrayList<>(v.lesChoix);
         this.etiquettes = new ArrayList<>(v.etiquettes);
         this.totalVotant = v.totalVotant;
         this.estimBudj = v.estimBudj;
     }
-    
-    public void setChoixGagnant() {
-    	Choix maxChoix = lesChoix.get(0);
-    	for(Choix ch : lesChoix) {
-    		if(ch.getPourcentage() > maxChoix.getPourcentage()) {
-    			maxChoix = ch;
-    		}
-    		
-    		choixGagnant = maxChoix;
-    	}
-    }
 
     public Vote(int idVote, int idVotant, int idGroupe) {
+		/*
+		 * Arguments : 
+		 * 		- voir FetchJSON.recupJSONVote
+		 * Sortie (c'est un constructeur donc pas vraiment une sortie mais ça fait quelque chose): 
+		 * 		-un objet vote crée à partir des données de la base de données
+		 * Contenu de la fonction : 
+		 * 		- La fonction récupère l'objet JSON crée par la fonction interrogeant l'API et le transforme en un objet Vote java.
+		 */
         try {
             // Récupération du JSON via l'API
             JSONObject j = FetchJSON.recupJSONVote(idVote, idVotant, idGroupe);
@@ -98,13 +108,42 @@ public class Vote {
             e.printStackTrace();
         }
     }
+    
+    public void setChoixGagnant() {
+		/*
+		 * Arguments : null
+		 * Sortie : null
+		 * Contenu de la fonction : met à jour un objet vote (this) en faisant en sorte que son choixGagnant devienne le choix qui a le plus de votes
+		 */
+    	Choix maxChoix = lesChoix.get(0);
+    	for(Choix ch : lesChoix) {
+    		if(ch.getPourcentage() > maxChoix.getPourcentage()) {
+    			maxChoix = ch;
+    		}
+    		
+    		choixGagnant = maxChoix;
+    	}
+    }
 	
-	public int nbVotantsGagnant() //renvoie le nombre de votants (approximativement) que réprésente la proposition majoritaire
+	public int nbVotantsGagnant()
 	{
+		/*
+		 * Arguments : null 
+		 * Sortie : null
+		 * Contenu de la fonction : renvoie le nombre de votants (approximativement) que réprésente la proposition majoritaire
+		 */
 		return (int) ((totalVotant / 100.0) * Math.round(choixGagnant.getPourcentage()));
 	}
 	
     public static Vote creerRandom() {
+		/*
+		 * Arguments : 
+		 * Sortie : 
+		 * 		-un objet vote
+		 * Contenu de la fonction : 
+		 * 		-Crée un objet vote avec un budget, nombre de choix, et etiquettes aléatoires. 
+		 *      -Cette fonction sert à creer des jeux de test
+		 */
         Vote vote = new Vote();
         Random random = new Random();
         ArrayList<String> etiquettesPossibles = new ArrayList<>(Arrays.asList("Urgent","Information","Changement","Debat","Culture"));
@@ -148,11 +187,16 @@ public class Vote {
         
         vote.setChoixGagnant();
         
-        vote.idVote=-1;
+        vote.idVote=-1; //idVote à -1 pour signaler que le vote n'appartient pas à la BD
         return vote;
     }
     
     public void afficherVote() {
+		/*
+		 * Arguments : null
+		 * Sortie : null
+		 * Contenu de la fonction : affiche un vote de maniere lisible pour un humain
+		 */
         System.out.println("Vote Details:");
         System.out.println("Total Votants: " + totalVotant);
         System.out.println("Estimation Budgetaire: " + estimBudj + " €");
@@ -167,17 +211,27 @@ public class Vote {
     }
     
     public void updateBudget(int nvBudj) throws IOException {
+		/*
+		 * Arguments : 
+		 * 		- nvBudj -> un entier qui correspond au budget que l'on veut appliquer à un vote
+		 * Sortie : 
+		 * 		- null 
+		 * 		- peut throw une IOException si la requete API se passe mal
+		 * Contenu de la fonction : 
+		 * 		- change le budget du vote surlequel cette fonction est appelée en nvBudj, dans la base de données et dans l'objet vote
+		 * 		- le fonctionnement des requetes HTML est similaire à celui dans la classe de l'api, avec la methode PUT au lieu de GET
+		 */
     	if(idVote==-1) {
     		throw new IOException("Ce vote est généré aléatoirement, vous ne pouvez pas le modifier dans la BD");
     	}
         String baseUrl = "https://projets.iut-orsay.fr/saes3-vjacqu3/classePHP/rest/PUT.php";
-        String urlString = baseUrl + "?table=Vote&idVote="+ idVote +"&evalBudget=" + nvBudj;
+        String urlString = baseUrl + "?table=Vote&idVote="+ this.idVote +"&evalBudget=" + nvBudj;
         /*idTemporaire apres on mettra -> */
         /*this.idVote à implémenter dans la classe mais pour l'instant l'api marche pas donc autant ne pas se faire chier*/; 
         URL url = new URL(urlString);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         
-        connection.setRequestMethod("PUT");  // Utilisation correcte de la méthode PUT
+        connection.setRequestMethod("PUT");  // Utilisation de la méthode PUT
         
         // Vérification du code de réponse HTTP pour du debug
         int responseCode = connection.getResponseCode();
@@ -185,19 +239,12 @@ public class Vote {
 
         if (responseCode == HttpURLConnection.HTTP_OK) {  // Vérification du code 200 OK
             System.out.println("Budget modifié !");
+            this.estimBudj=nvBudj;
         } else {
             System.out.println("Échec de la modification du budget, code : " + responseCode);
         }
-
+        
         connection.disconnect();
     }
 
-    
-	public static void main(String[] args) {
-		Vote v = new Vote(6,2,2);
-		v.afficherVote();
-		Vote v2 = creerRandom();
-		System.out.println("----------------");
-		v2.afficherVote();
-	}
 }

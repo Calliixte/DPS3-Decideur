@@ -19,20 +19,27 @@ public class FetchJSON {
 		return 0;
 	}
 	
-	
-	/******* dans les methodes recup y'a du debug qui traine donc des prints random se balladent dans le code faites gaffe */
-	
-	
-	public static JSONObject recupJSONVote(int idUser,int idVotant,int idGroupe) throws IOException {
+	public static JSONObject recupJSONVote(int idVote,int idVotant,int idGroupe) throws IOException {
+		/*
+		 * Arguments : 
+		 * 		- idVote -> id du vote dont on veut les informations 
+		 * 		- idVotant -> id de la personne dont on veut le vote, ne sevira pas ici mais est necessaire à l'api
+		 * 		- idGroupe -> id du groupe dans lequel le vote est crée
+		 * Sortie : 
+		 * 		- un objet JSON qui contient toutes les informations liées au vote
+		 * Contenu de la fonction : 
+		 * 		- la fonction établit une connexion avec le serveur,envoie la requete Get, vérifie que le code de retour est le bon, puis convertit le contenu
+		 * 			obtenu en JSON et renvoie cet objet
+		 */
 		JSONObject jsonVoulu = null;
-        String baseUrl = "https://projets.iut-orsay.fr/saes3-vjacqu3/classePHP/rest/GET.php?classe=vote&id="+idUser+"&idVotant="+idVotant+"&idGroupe="+idGroupe;
-        String urlString = baseUrl + idUser; 
+        String baseUrl = "https://projets.iut-orsay.fr/saes3-vjacqu3/classePHP/rest/GET.php?classe=vote&id="+idVote+"&idVotant="+idVotant+"&idGroupe="+idGroupe;
+        String urlString = baseUrl + idVote; 
         URL url = new URL(urlString);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         //Vérifier le code de réponse HTTP pour du debug
         int responseCode = connection.getResponseCode();
-        System.out.println("Response Code for ID " + idUser + ": " + responseCode); 
+        System.out.println("Response Code for ID " + idVote + ": " + responseCode); 
         
         //lire la réponse en s'assurant que le code est le bon
         if (responseCode == HttpURLConnection.HTTP_OK) {  // on verifie que le code renvoie un ok
@@ -57,6 +64,14 @@ public class FetchJSON {
 		
 	}
 	public static JSONObject recupJSONUtilisateur(int idUser) throws IOException {
+		/*
+		 * Arguments : 
+		 * 		- idUser -> l'id de l'utilisateur dont on veut les informations
+		 * Sortie : 
+		 * 		- un objet JSON contenant les informations de l'utililsateur
+		 * Contenu de la fonction : 
+		 * 		- voir description de recupJSONVote
+		 */
 		JSONObject jsonVoulu = null;
         String baseUrl = "https://projets.iut-orsay.fr/saes3-vjacqu3/classePHP/rest/GET.php?classe=utilisateur&id=";
         String urlString = baseUrl + idUser; 
@@ -89,55 +104,6 @@ public class FetchJSON {
 		return jsonVoulu;
 		
 	}
-    public static void main(String[] args) {
-//            // Configurer l'authentification par défaut
-//            Authenticator.setDefault(new Authenticator() {
-//                protected PasswordAuthentication getPasswordAuthentication() {
-//                    return new PasswordAuthentication("abaco", "Evedydruggi2leficane.".toCharArray());
-//                }
-//            });
-            try {
-            	JSONObject a = recupJSONUtilisateur(1);
-            	JSONObject b = recupJSONVote(5,1,1);
-                System.out.println(a);
-                System.out.println("keyset : " + a.keySet());
-                for (String key : a.keySet()) {
-                	  Object value = a.get(key);
-                	  System.out.println(key + ": " + value);
-                }
-                System.out.println("Vote !");
-                System.out.println("");
-                System.out.println("keyset : " + b.keySet());
-                for (String key : b.keySet()) {
-                	  Object value = b.get(key);
-                	  System.out.println(key + ": " + value);
-                }
-                
-            }catch(IOException e) {}
-
-            
-
-                    // Ouvrir la connexion HTTP
-                   
-
-
-
-                    // Lire la réponse JSON
-                
-
-                    // Fermer la connexion
-                    
-
-//                } catch (Exception e) {
-//                    System.out.println("Erreur lors de la récupération des données pour l'ID " + i);
-//                    e.printStackTrace();
-//                }
-//            }
-//        } catch (Exception e) {
-//            // Gestion d'exception générale si l'authentification échoue
-//            System.out.println("Erreur de configuration de l'authentification");
-//            e.printStackTrace();
-//        }
-    }
+ 
 }
 

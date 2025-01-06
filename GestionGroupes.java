@@ -5,10 +5,6 @@ import java.io.IOException;
 
 public class GestionGroupes {
 
-	/*
-	 *	Hop tout le code a disparu dommage c'est le dieux du code qui sont passés (non je l'ai juste changé de fichier pour adapter au sujet)
-	 * 
-	 */
 
 
 	public static void main(String[] args) {

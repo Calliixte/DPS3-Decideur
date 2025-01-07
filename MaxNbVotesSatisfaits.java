@@ -7,9 +7,6 @@ import java.util.LinkedList;
  * Auteur de ce mode de décision : A.Baco
  */
 public class MaxNbVotesSatisfaits {
-	/*
-	 * author : A.Baco
-	 */
 	public static ArrayList<Vote> glouton(Groupe g){
 		/*
 		 * Arguments : 
@@ -31,14 +28,9 @@ public class MaxNbVotesSatisfaits {
 					}
 				}
 				
-				System.out.println("final : " + MinBudget.getSatisfactionMoyenne(votesChoisis)); //Debug
-				System.out.println("final : " + MinBudget.getSumBudget(votesChoisis));
-				
 				return votesChoisis;
 	}
-	/*
-	 * rajouter un glouton qui commence toujours par le vote avec le plus de votants
-	 */
+
 	public static ArrayList<Vote> gloutonSeuil(Groupe g, double seuil){
 		/*
 		 * Arguments : 
@@ -60,9 +52,6 @@ public class MaxNbVotesSatisfaits {
 						budgetRestant-=v.getEstimBudget(); //on update le budj restant
 					}
 				}
-				
-				System.out.println("final : " + MinBudget.getSatisfactionMoyenne(votesSatisfaisants)); //Debug
-				System.out.println("final : " + MinBudget.getSumBudget(votesSatisfaisants));
 				
 				return votesSatisfaisants;
 	}

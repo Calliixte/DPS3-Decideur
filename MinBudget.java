@@ -9,8 +9,8 @@ public class MinBudget {
 	public static ArrayList<Vote> minimiserBudgetBruteForce(ArrayList<Vote> listeVote, int seuil) {
 		/*
 		 * Arguments : 
-		 * 		- g -> un groupe sur lequel on veut réaliser ce traitement
-		 * 		- seuil -> un entier qui definit le seuil a ne pas depasser
+		 * 		- listeVote -> la liste des votes d'un groupe sur lequel on veut réaliser ce traitement
+		 * 		- seuil -> un entier qui definit le seuil de budget a ne pas depasser
 		 * Sortie : 
 		 * 		- liste de Votes représentant les votes à choisir d'apres l'algorithme
 		 * Contenu de la fonction :
@@ -51,7 +51,7 @@ public class MinBudget {
 		/*
 		 * Arguments : 
 		 * 		- g -> un groupe sur lequel on veut réaliser ce traitement
-		 * 		- seuil -> un entier qui definit le seuil a ne pas depasser
+		 * 		- seuil -> un entier qui definit le seuil de budget a ne pas depasser
 		 * Sortie : 
 		 * 		- liste de Votes représentant les votes à choisir d'apres l'algorithme
 		 * Contenu de la fonction :
@@ -80,7 +80,7 @@ public class MinBudget {
 		/*
 		 * Arguments : 
 		 * 		- g -> un groupe sur lequel on veut réaliser ce traitement
-		 * 		- seuil -> un entier qui definit le seuil a ne pas depasser
+		 * 		- seuil -> un pourcentage qui definit le seuil de satisfaction minimum voulu
 		 * Sortie : 
 		 * 		- liste de Votes représentant les votes à choisir d'apres l'algorithme
 		 * Contenu de la fonction :
@@ -115,8 +115,8 @@ public class MinBudget {
 	public static ArrayList<Vote> satisfactionMoyenneBruteForce(ArrayList<Vote> listeVote, double seuil) {
 		/*
 		 * Arguments : 
-		 * 		- g -> un groupe sur lequel on veut réaliser ce traitement
-		 * 		- seuil -> un entier qui definit le seuil a ne pas depasser
+		 * 		- listeVote -> la liste des votes d'un groupe sur lequel on veut réaliser ce traitement
+		 * 		- seuil -> un pourcentage qui definit le seuil de satisfaction minimum voulu
 		 * Sortie : 
 		 * 		- liste de Votes représentant les votes à choisir d'apres l'algorithme
 		 * Contenu de la fonction :
@@ -157,7 +157,8 @@ public class MinBudget {
 		}
 	}
 	
-	public static int idMaxSatisfaction(ArrayList<Vote> listeVote) {
+	
+	public static int idMaxSatisfaction(ArrayList<Vote> listeVote) { //Jamais utilisé
 		/*
 		 * Arguments :
 		 * 		-listeVote -> la liste des votes dont on veut recuperer l'emplacement de la satisfaction maximum 
@@ -166,6 +167,10 @@ public class MinBudget {
 		 * Contenu de la fonction :
 		 * 		- parcourt la liste passée en paramètre à la recherche de la proposition à la satisfaction maximum,
 		 * renvoie sa position dans la liste lorsque elle est trouvée
+		 * 
+		 * On définit la satisfaction comme le pourcentage de gens ayant voté pour le choix gagnant.
+		 * On considère qu'en acceptant le vote dont le choix gagnant a été choisi par le plus de monde, 
+		 * on maximisera le nombre de gens satisfait.
 		 */
 		int max = 0;
 		for(int i=0; i < listeVote.size(); i++){
@@ -203,14 +208,18 @@ public class MinBudget {
 	public static boolean testSatisfactionMoyenne(ArrayList<Vote> listeVote, Vote test, double seuil) {
 		/*
 		 * Arguments : 
-		 * 		- listeVote -> la liste actuelle des votes selectionnés par un traitement
-		 * 		- seuil -> un entier qui definit le seuil a ne pas depasser
+		 * 		- listeVote -> la liste actuelle des votes sélectionnés par un traitement
+		 * 		- seuil -> un pourcentage qui definit le seuil de satisfaction minimum voulu
 		 * 		- test -> un vote que l'on veut ajouter à la liste
 		 * Sortie : 
 		 * 		- boolean -> true sur listeVote + test restent sous le seuil, false sinon
 		 * Contenu de la fonction :
 		 * 		- Vérifie si la satisfaction moyenne de la liste restera sous le seuil donné en paramètre 
 		 * si on y ajoute la proposition donnée en paramètre.
+		 * 
+		 * On définit la satisfaction comme le pourcentage de gens ayant voté pour le choix gagnant.
+		 * On considère qu'en acceptant le vote dont le choix gagnant a été choisi par le plus de monde, 
+		 * on maximisera le nombre de gens satisfait.
 		 */
 		double moyenne = 0;
 		for(Vote vote : listeVote){
@@ -228,6 +237,10 @@ public class MinBudget {
 		 * 		- double -> la satisfaction moyenne
 		 * Contenu de la fonction :
 		 * 		- Renvoie la satisfaction moyenne d'une liste de votes
+		 * 
+		 * On définit la satisfaction comme le pourcentage de gens ayant voté pour le choix gagnant.
+		 * On considère qu'en acceptant le vote dont le choix gagnant a été choisi par le plus de monde, 
+		 * on maximisera le nombre de gens satisfait.
 		 */
 		double moyenne = 0;
 		for(Vote vote : listeVote){
@@ -240,7 +253,7 @@ public class MinBudget {
 	public static boolean testSumBudget(ArrayList<Vote> listeVote, Vote test, int seuil) {
 		/*
 		 * Arguments : 
-		 * 		- listeVote -> la liste actuelle des votes selectionnés par un traitement
+		 * 		- listeVote -> la liste actuelle des votes sélectionnés par un traitement
 		 * 		- seuil -> un entier qui definit le seuil budgétaire a ne pas depasser
 		 * 		- test -> un vote que l'on veut ajouter à la liste
 		 * Sortie : 

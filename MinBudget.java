@@ -1,17 +1,20 @@
 package algos;
 
 import java.util.ArrayList;
-
+/*
+ * Auteur de ce mode de décision : A.Sandoz
+ */
 public class MinBudget {
-	/*
-	 * author : A.Sandoz
-	 */
-	
 	
 	public static ArrayList<Vote> minimiserBudgetBruteForce(ArrayList<Vote> listeVote, int seuil) {
 		/*
-		 * A.Sandoz
-		 * Algo force brute sélectionnant le maximum de proposition 
+		 * Arguments : 
+		 * 		- g -> un groupe sur lequel on veut réaliser ce traitement
+		 * 		- seuil -> un entier qui definit le seuil a ne pas depasser
+		 * Sortie : 
+		 * 		- liste de Votes représentant les votes à choisir d'apres l'algorithme
+		 * Contenu de la fonction :
+		 * 		- Algo force brute sélectionnant le maximum de proposition 
 		 * en gardant le budget en dessous d'un seuil donné en paramètre
 		 */
 		
@@ -46,8 +49,13 @@ public class MinBudget {
 	
 	public static ArrayList<Vote> minimiserBudgetGlouton(Groupe g, int seuil){
 		/*
-		 * A.Sandoz
-		 * Algo glouton sélectionnant le maximum de proposition 
+		 * Arguments : 
+		 * 		- g -> un groupe sur lequel on veut réaliser ce traitement
+		 * 		- seuil -> un entier qui definit le seuil a ne pas depasser
+		 * Sortie : 
+		 * 		- liste de Votes représentant les votes à choisir d'apres l'algorithme
+		 * Contenu de la fonction :
+		 * 		- Algo glouton sélectionnant le maximum de proposition 
 		 * en gardant le budget en dessous d'un seuil donné en paramètre
 		 */
 		
@@ -70,8 +78,13 @@ public class MinBudget {
 	
 	public static ArrayList<Vote> satisfactionMoyenneGlouton(Groupe g, double seuil){
 		/*
-		 * A.Sandoz
-		 * Algo glouton minimisant le budget tout en gardant une satisfaction moyenne 
+		 * Arguments : 
+		 * 		- g -> un groupe sur lequel on veut réaliser ce traitement
+		 * 		- seuil -> un entier qui definit le seuil a ne pas depasser
+		 * Sortie : 
+		 * 		- liste de Votes représentant les votes à choisir d'apres l'algorithme
+		 * Contenu de la fonction :
+		 * 		- Algo glouton minimisant le budget tout en gardant une satisfaction moyenne 
 		 * au dessus d'un seuil en pourcentage donné en paramètre
 		 *  
 		 * 
@@ -101,8 +114,13 @@ public class MinBudget {
 	
 	public static ArrayList<Vote> satisfactionMoyenneBruteForce(ArrayList<Vote> listeVote, double seuil) {
 		/*
-		 * A.Sandoz
-		 * Algo force brute minimisant le budget tout en gardant une satisfaction moyenne 
+		 * Arguments : 
+		 * 		- g -> un groupe sur lequel on veut réaliser ce traitement
+		 * 		- seuil -> un entier qui definit le seuil a ne pas depasser
+		 * Sortie : 
+		 * 		- liste de Votes représentant les votes à choisir d'apres l'algorithme
+		 * Contenu de la fonction :
+		 * 		- Algo force brute minimisant le budget tout en gardant une satisfaction moyenne 
 		 * au dessus d'un seuil en pourcentage donné en paramètre
 		 *  
 		 * 
@@ -141,7 +159,13 @@ public class MinBudget {
 	
 	public static int idMaxSatisfaction(ArrayList<Vote> listeVote) {
 		/*
-		 * A.Sandoz
+		 * Arguments :
+		 * 		-listeVote -> la liste des votes dont on veut recuperer l'emplacement de la satisfaction maximum 
+		 * Sortie : 
+		 * 		- un entier -> l'emplacement dans la liste de la satisfaction maximum
+		 * Contenu de la fonction :
+		 * 		- parcourt la liste passée en paramètre à la recherche de la proposition à la satisfaction maximum,
+		 * renvoie sa position dans la liste lorsque elle est trouvée
 		 */
 		int max = 0;
 		for(int i=0; i < listeVote.size(); i++){
@@ -156,7 +180,13 @@ public class MinBudget {
 	
 	public static int idMinBudget(ArrayList<Vote> listeVote) {
 		/*
-		 * A.Sandoz
+		 * Arguments :
+		 * 		-listeVote -> la liste des votes dont on veut recuperer l'emplacement du budget minimum
+		 * Sortie : 
+		 * 		- un entier -> l'emplacement dans la liste du budget minimum
+		 * Contenu de la fonction :
+		 * 		- parcourt la liste passée en paramètre à la recherche de la proposition au budget le plus bas,
+		 * renvoie sa position dans la liste lorsque elle est trouvée
 		 */
 		int idMin = 0;
 		
@@ -172,9 +202,14 @@ public class MinBudget {
 	
 	public static boolean testSatisfactionMoyenne(ArrayList<Vote> listeVote, Vote test, double seuil) {
 		/*
-		 * A.Sandoz
-		 * 
-		 * Vérifie si la satisfaction moyenne de la liste restera sous le seuil donné en paramètre 
+		 * Arguments : 
+		 * 		- listeVote -> la liste actuelle des votes selectionnés par un traitement
+		 * 		- seuil -> un entier qui definit le seuil a ne pas depasser
+		 * 		- test -> un vote que l'on veut ajouter à la liste
+		 * Sortie : 
+		 * 		- boolean -> true sur listeVote + test restent sous le seuil, false sinon
+		 * Contenu de la fonction :
+		 * 		- Vérifie si la satisfaction moyenne de la liste restera sous le seuil donné en paramètre 
 		 * si on y ajoute la proposition donnée en paramètre.
 		 */
 		double moyenne = 0;
@@ -187,7 +222,12 @@ public class MinBudget {
 	
 	public static double getSatisfactionMoyenne(ArrayList<Vote> listeVote) {
 		/*
-		 * A.Sandoz
+		 * Arguments : 
+		 * 		- listeVote -> la liste dont on veut extraire la satisfaction moyenne
+		 * Sortie : 
+		 * 		- double -> la satisfaction moyenne
+		 * Contenu de la fonction :
+		 * 		- Renvoie la satisfaction moyenne d'une liste de votes
 		 */
 		double moyenne = 0;
 		for(Vote vote : listeVote){
@@ -199,7 +239,15 @@ public class MinBudget {
 	
 	public static boolean testSumBudget(ArrayList<Vote> listeVote, Vote test, int seuil) {
 		/*
-		 * A.Sandoz
+		 * Arguments : 
+		 * 		- listeVote -> la liste actuelle des votes selectionnés par un traitement
+		 * 		- seuil -> un entier qui definit le seuil budgétaire a ne pas depasser
+		 * 		- test -> un vote que l'on veut ajouter à la liste
+		 * Sortie : 
+		 * 		- boolean -> true sur le budget total de listeVote + le budget de test restent sous le seuil , false sinon
+		 * Contenu de la fonction :
+		 * 		- Vérifie si le budget total de la liste restera sous le seuil donné en paramètre 
+		 * si on y ajoute la proposition donnée en paramètre.
 		 */
 		
 		return	(getSumBudget(listeVote) + test.estimBudj) <= seuil;
@@ -207,13 +255,18 @@ public class MinBudget {
 	
 	public static int getSumBudget(ArrayList<Vote> listeVote) {
 		/*
-		 * A.Sandoz
+		 * Arguments : 
+		 * 		- listeVote -> une liste d'objets vote dont on veut la somme de budgets
+		 * Sortie : 
+		 * 		- entier -> la somme du budget de la liste
+		 * Contenu de la fonction :
+		 * 		- parcourt la liste et ajoute à une somme totale le budget de chaque vote
 		 */
 		int sum = 0;
 		for(Vote vote : listeVote){
 			sum += vote.estimBudj;
 		}
 		
-		return	sum;
+		return sum;
 	}
 }

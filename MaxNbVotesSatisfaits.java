@@ -1,16 +1,24 @@
 package algos;
 
 import java.util.ArrayList;
-
+import java.util.List;
+import java.util.LinkedList;
+/*
+ * Auteur de ce mode de décision : A.Baco
+ */
 public class MaxNbVotesSatisfaits {
 	/*
 	 * author : A.Baco
 	 */
 	public static ArrayList<Vote> glouton(Groupe g){
 		/*
-		 * A.Baco
-		 * Glouton :
-		 * Algorithme extremement primaire : prends des votes jusque à ne plus pouvoir vis à vis du budget 
+		 * Arguments : 
+		 * 		- g -> un groupe sur lequel on veut réaliser ce traitement
+		 * Sortie : 
+		 * 		- liste de Votes représentant les votes à choisir d'apres l'algorithme
+		 * Contenu de la fonction :
+		 * 		- Glouton :
+		 * Algorithme extremement primaire : prend des votes jusque à ne plus pouvoir vis à vis du budget 
 		 */
 		ArrayList<Vote> votesChoisis = new ArrayList<>();
 		ArrayList<Vote> listeVote = new ArrayList<Vote>(g.getListeVote());
@@ -30,8 +38,12 @@ public class MaxNbVotesSatisfaits {
 	}
 	public static ArrayList<Vote> gloutonSeuil(Groupe g, double seuil){
 		/*
-		 * A.Baco
-		 * Glouton :
+		 * Arguments : 
+		 * 		- g -> un groupe sur lequel on veut réaliser ce traitement
+		 * Sortie : 
+		 * 		- liste de Votes représentant les votes à choisir d'apres l'algorithme
+		 * Contenu de la fonction :
+		 * 		- Glouton :
 		 * Selectionne des votes sans regard vis à vis du budget en vérifiant simplement que la proposition gagnante du vote
 		 * dépasse le seuil donné dans la fonction
 		 */
@@ -52,28 +64,14 @@ public class MaxNbVotesSatisfaits {
 				return votesSatisfaisants;
 	}
 	
-	
-	
-	
-	
-	/*
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * CHANGER LE BRUTEFORCE POUR QU'IL UTILISE LIST AU LIEU DE ARRAYLIST,
-	 * CEST DEMANDE DANS LE SUJET
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
 	public static ArrayList<Vote> bruteForce(Groupe g) {
 		/*
-		 * A.Baco
-		 * Force Brute : 
+		 * Arguments : 
+		 * 		- g -> un groupe sur lequel on veut réaliser ce traitement
+		 * Sortie : 
+		 * 		- liste de Votes représentant les votes à choisir d'apres l'algorithme
+		 * Contenu de la fonction :
+		 * 		- Force Brute : 
 		 * Maximise le nombre de votes satisfaits tout en respectant la contrainte de budget
 		 */
 		
@@ -131,4 +129,67 @@ public class MaxNbVotesSatisfaits {
 		}
 		
 	}
+	
+	public static List<Vote> bruteForceList(Groupe g) {
+		/*
+		 * Arguments : 
+		 * 		- g -> un groupe sur lequel on veut réaliser ce traitement
+		 * Sortie : 
+		 * 		- liste de Votes représentant les votes à choisir d'apres l'algorithme
+		 * Contenu de la fonction :
+	     *  - Force Brute : 
+	     * Maximise le nombre de votes satisfaits tout en respectant la contrainte de budget, fonctionnement 
+	     * similaire à l'algorithme précédent mais utilise le type List de java, comme demandé par le sujet
+	     */
+	    
+	    // Condition d'arrêt : groupe vide ou budget épuisé
+	    if (g.votes.isEmpty() || g.votes.size() <= 0 || g.BudgetAlloue <= 0) {
+	        return new LinkedList<>();
+	    }
+
+	    List<Vote> choixCas1 = new LinkedList<>();
+	    List<Vote> choixCas2 = new LinkedList<>();
+	    Groupe gCopie = new Groupe(g); // Copie du groupe pour éviter de modifier l'original
+
+	    Vote premierVote = gCopie.votes.remove(0);
+
+	    // ---- Cas 1 : On ne prend pas le premier vote
+	    choixCas1.addAll(bruteForce(gCopie));
+
+	    // ---- Cas 2 : On prend le premier vote s'il respecte le budget
+	    if (premierVote.estimBudj < g.BudgetAlloue) {
+	        choixCas2.add(premierVote);
+	        gCopie.BudgetAlloue -= premierVote.estimBudj;
+	        choixCas2.addAll(bruteForce(gCopie));
+	    } else {
+	        choixCas2.addAll(bruteForce(gCopie));
+	    }
+
+	    // ---- Comparaison des deux cas : choisir celui avec le plus de satisfaits
+	    int totalSatis1 = 0;
+	    int totalSatis2 = 0;
+
+	    for (Vote v : choixCas1) {
+	        if (v.choixGagnant == null) {
+	            v.setChoixGagnant();
+	        }
+	        totalSatis1 += v.nbVotantsGagnant();
+	    }
+
+	    for (Vote v : choixCas2) {
+	        if (v.choixGagnant == null) {
+	            v.setChoixGagnant();
+	        }
+	        totalSatis2 += v.nbVotantsGagnant();
+	    }
+
+	    if (totalSatis1 > totalSatis2) {
+	        return choixCas1;
+	    } else {
+	        return choixCas2;
+	    }
+	}
+
+	
+
 }

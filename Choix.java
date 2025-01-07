@@ -26,7 +26,7 @@ public class Choix {
 	
 	public double getPourcentage() {
 		/*
-		 * getter de Nom
+		 * getter de Pourcentage
 		 */
 		return pourcentage;
 	}

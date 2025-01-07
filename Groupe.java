@@ -69,7 +69,7 @@ public class Groupe {
 			List<Object> listeIdVotes = g.getJSONArray("votes").toList();
 			for(int i=0;i<listeIdVotes.size();i++) {
 				int patch  = (int)listeIdVotes.get(i);
-				Vote v = new Vote(patch,1);
+				Vote v = new Vote(patch);
 				votes.add(v);
 			}
 			nomGroupe = g.getString("nomGroupe");

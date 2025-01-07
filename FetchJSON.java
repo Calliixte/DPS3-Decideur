@@ -57,7 +57,7 @@ public class FetchJSON {
 		
 	}
 	
-	public static JSONObject recupJSONVote(int idVote,int idVotant) throws IOException {
+	public static JSONObject recupJSONVote(int idVote) throws IOException {
 		/*
 		 * Arguments : 
 		 * 		- idVote -> id du vote dont on veut les informations 

@@ -268,7 +268,7 @@ public class GestionGroupes {
 		 */
 		System.out.println("Bienvenue dans le debug menu de l'application de Gestion decideur DPS3");
 		System.out.println("Votre groupe créé aléatoirement pour le debug est le suivant : ");
-		Groupe g = new Groupe(); //crée un groupe aléatoire
+		Groupe g = new Groupe(3); //crée un groupe aléatoire
 		g.afficherGroupe();
 		boolean applicationTourne = true;
 		while(applicationTourne) {

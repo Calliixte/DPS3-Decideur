@@ -47,7 +47,7 @@ public class Vote {
         this.estimBudget = v.estimBudget;
     }
 
-    public Vote(int idVote, int idVotant) {
+    public Vote(int idVote) {
 		/*
 		 * Arguments : 
 		 * 		- voir FetchJSON.recupJSONVote
@@ -58,7 +58,7 @@ public class Vote {
 		 */
         try {
             // Récupération du JSON via l'API
-            JSONObject j = FetchJSON.recupJSONVote(idVote, idVotant);
+            JSONObject j = FetchJSON.recupJSONVote(idVote);
             
             // Remplir l'identifiant du vote
             this.nomVote = j.getString("titreVote");

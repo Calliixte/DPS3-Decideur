@@ -65,9 +65,9 @@ public class Vote {
             
             // Remplir l'estimation budgétaire
             if(j.get("evalBudget") == "null") {
-                this.estimBudget = j.getInt("evalBudget");
-            }else {
             	this.estimBudget = -1;
+            }else {
+                this.estimBudget = j.getInt("evalBudget");
             }
 
             

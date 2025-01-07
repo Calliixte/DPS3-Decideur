@@ -19,6 +19,7 @@ public class Groupe {
 		 * Sortie (constructeur donc pas vraiment mais si): groupe 
 		 * Contenu de la fonction : crée un groupe aléatoire avec un budget aléatoire, en donnant à ce groupe un nombre aléatoire de votes aléatoires
 		 */
+		nomGroupe = "Groupe de Test";
 		Random rnd = new Random();
 		BudgetAlloue = 1000 + rnd.nextInt(90001); //budget entre 1 000 et 100 000
 		votes = creerListeVoteTest(4+rnd.nextInt(8)); //entre 4 et 11 votes dans le groupe	
@@ -72,7 +73,7 @@ public class Groupe {
 				votes.add(v);
 			}
 			nomGroupe = g.getString("nomGroupe");
-			BudgetAlloue= 100000;
+			BudgetAlloue= g.getInt("budget");
 
 		}catch(IOException e) {
 			System.out.println(e.getMessage());

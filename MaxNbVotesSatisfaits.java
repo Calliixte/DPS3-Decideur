@@ -36,6 +36,9 @@ public class MaxNbVotesSatisfaits {
 				
 				return votesChoisis;
 	}
+	/*
+	 * rajouter un glouton qui commence toujours par le vote avec le plus de votants
+	 */
 	public static ArrayList<Vote> gloutonSeuil(Groupe g, double seuil){
 		/*
 		 * Arguments : 

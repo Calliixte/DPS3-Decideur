@@ -100,6 +100,24 @@ public class Groupe {
 		}
 		return liste;
 	}
+	public void afficherGroupe() {
+		/*
+		 * Arguments :
+		 * 		- null
+		 * Sortie : 
+		 * 		- null
+		 * Contenu de la fonction :
+		 * 		- affichage stylisé d'un groupe, exclusivement pour l'application console décideur
+		 */
+    	System.out.println("-----------------------------------");
+		for (int i=0; i <this.votes.size();i++) {
+			System.out.println("---------- Vote "+(i+1)+" ----------");
+			this.votes.get(i).afficherVote();
+		}
+		System.out.println("-----------------------------------");
+		System.out.println("Budget : " + this.BudgetAlloue + " €");
+		System.out.println("-----------------------------------");
+	}
 	
 	
 	

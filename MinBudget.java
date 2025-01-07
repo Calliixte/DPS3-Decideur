@@ -174,7 +174,7 @@ public class MinBudget {
 		 */
 		int max = 0;
 		for(int i=0; i < listeVote.size(); i++){
-			if(listeVote.get(i).choixGagnant.getPourcentage() > listeVote.get(max).choixGagnant.getPourcentage()) //On prend la proposition à la satisfaction maximum (celle avec le plus grand pourcentage de vote gagnant)
+			if(listeVote.get(i).getChoixGagnant().getPourcentage() > listeVote.get(max).getChoixGagnant().getPourcentage()) //On prend la proposition à la satisfaction maximum (celle avec le plus grand pourcentage de vote gagnant)
 			{
 				max = i;
 			}
@@ -196,7 +196,7 @@ public class MinBudget {
 		int idMin = 0;
 		
 		for(int i=0; i < listeVote.size(); i++) {
-			if(listeVote.get(i).estimBudj < listeVote.get(idMin).estimBudj) //On prend la proposition au budget minimum
+			if(listeVote.get(i).getEstimBudget() < listeVote.get(idMin).getEstimBudget()) //On prend la proposition au budget minimum
 			{ 
 				idMin = i;
 			}
@@ -223,9 +223,9 @@ public class MinBudget {
 		 */
 		double moyenne = 0;
 		for(Vote vote : listeVote){
-			moyenne += vote.choixGagnant.getPourcentage();
+			moyenne += vote.getChoixGagnant().getPourcentage();
 		}
-		moyenne += test.choixGagnant.getPourcentage();
+		moyenne += test.getChoixGagnant().getPourcentage();
 		return	(moyenne/(listeVote.size() + 1)) >= seuil; //On ajoute 1 car on ajoute une proposition à la liste, permet aussi d'éviter la division par zéros en cas de liste vide
 	}
 	
@@ -244,7 +244,7 @@ public class MinBudget {
 		 */
 		double moyenne = 0;
 		for(Vote vote : listeVote){
-			moyenne += vote.choixGagnant.getPourcentage();
+			moyenne += vote.getChoixGagnant().getPourcentage();
 		}
 		
 		return	moyenne/listeVote.size();
@@ -263,7 +263,7 @@ public class MinBudget {
 		 * si on y ajoute la proposition donnée en paramètre.
 		 */
 		
-		return	(getSumBudget(listeVote) + test.estimBudj) <= seuil;
+		return	(getSumBudget(listeVote) + test.getEstimBudget()) <= seuil;
 	}
 	
 	public static int getSumBudget(ArrayList<Vote> listeVote) {
@@ -277,7 +277,7 @@ public class MinBudget {
 		 */
 		int sum = 0;
 		for(Vote vote : listeVote){
-			sum += vote.estimBudj;
+			sum += vote.getEstimBudget();
 		}
 		
 		return sum;

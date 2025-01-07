@@ -25,9 +25,9 @@ public class MaxNbVotesSatisfaits {
 		int budgetRestant = g.BudgetAlloue; //copie pour pouvoire suivre l'evolution du budget
 				while(listeVote.size() > 0){	
 					Vote v = listeVote.remove(0);
-					if(budgetRestant-v.estimBudj>=0) { //si la voix gagnante est au dessus du seuil et que le vote rentre dans le budj
+					if(budgetRestant-v.getEstimBudget()>=0) { //si la voix gagnante est au dessus du seuil et que le vote rentre dans le budj
 						votesChoisis.add(v);//On l'ajoute au result
-						budgetRestant-=v.estimBudj; //on update le budj restant
+						budgetRestant-=v.getEstimBudget(); //on update le budj restant
 					}
 				}
 				
@@ -55,9 +55,9 @@ public class MaxNbVotesSatisfaits {
 		int budgetRestant = g.BudgetAlloue; //copie pour pouvoire suivre l'evolution du budget
 				while(listeVote.size() > 0){	
 					Vote v = listeVote.remove(0);
-					if(v.choixGagnant.getPourcentage()>=seuil && budgetRestant-v.estimBudj>=0) { //si la voix gagnante est au dessus du seuil et que le vote rentre dans le budj
+					if(v.getChoixGagnant().getPourcentage()>=seuil && budgetRestant-v.getEstimBudget()>=0) { //si la voix gagnante est au dessus du seuil et que le vote rentre dans le budj
 						votesSatisfaisants.add(v);//On l'ajoute au result
-						budgetRestant-=v.estimBudj; //on update le budj restant
+						budgetRestant-=v.getEstimBudget(); //on update le budj restant
 					}
 				}
 				
@@ -98,9 +98,9 @@ public class MaxNbVotesSatisfaits {
 		//si le premier vote rentre dans le budget alors choixCas2.add(premier vote)
 		//et choixCas2.add(maxNbSatisfaits(groupe - le premier vote))
 		//s'il rentre pas on relance aussi sans le premier vote juste y'aura pas le premier vote avant
-		if(premierVote.estimBudj<g.BudgetAlloue) {
+		if(premierVote.getEstimBudget()<g.BudgetAlloue) {
 			choixCas2.add(premierVote);
-			gCopie.BudgetAlloue-=premierVote.estimBudj;
+			gCopie.BudgetAlloue-=premierVote.getEstimBudget();
 			choixCas2.addAll(bruteForce(gCopie));
 		}else {
 			choixCas2.addAll(bruteForce(gCopie));
@@ -112,14 +112,14 @@ public class MaxNbVotesSatisfaits {
 		int totalSatis1=0;
 		int totalSatis2=0;
 		for(Vote v : choixCas1) {
-			if(v.choixGagnant == null) {
-				v.setChoixGagnant();
+			if(v.getChoixGagnant() == null) {
+				v.updateChoixGagnant();
 			}
 			totalSatis1+=v.nbVotantsGagnant();
 		}
 		for(Vote v : choixCas2) {
-			if(v.choixGagnant == null) {
-				v.setChoixGagnant();
+			if(v.getChoixGagnant() == null) {
+				v.updateChoixGagnant();
 			}
 			totalSatis2+=v.nbVotantsGagnant();
 		
@@ -160,9 +160,9 @@ public class MaxNbVotesSatisfaits {
 	    choixCas1.addAll(bruteForce(gCopie));
 
 	    // ---- Cas 2 : On prend le premier vote s'il respecte le budget
-	    if (premierVote.estimBudj < g.BudgetAlloue) {
+	    if (premierVote.getEstimBudget() < g.BudgetAlloue) {
 	        choixCas2.add(premierVote);
-	        gCopie.BudgetAlloue -= premierVote.estimBudj;
+	        gCopie.BudgetAlloue -= premierVote.getEstimBudget();
 	        choixCas2.addAll(bruteForce(gCopie));
 	    } else {
 	        choixCas2.addAll(bruteForce(gCopie));
@@ -173,15 +173,15 @@ public class MaxNbVotesSatisfaits {
 	    int totalSatis2 = 0;
 
 	    for (Vote v : choixCas1) {
-	        if (v.choixGagnant == null) {
-	            v.setChoixGagnant();
+	        if (v.getChoixGagnant() == null) {
+	            v.updateChoixGagnant();
 	        }
 	        totalSatis1 += v.nbVotantsGagnant();
 	    }
 
 	    for (Vote v : choixCas2) {
-	        if (v.choixGagnant == null) {
-	            v.setChoixGagnant();
+	        if (v.getChoixGagnant() == null) {
+	            v.updateChoixGagnant();
 	        }
 	        totalSatis2 += v.nbVotantsGagnant();
 	    }

@@ -24,7 +24,7 @@ public class GestionGroupes {
 		for(int i =0;i<a.size();i++) {
 			a.get(i).afficherVote();
 			totalSatis+= a.get(i).nbVotantsGagnant();
-			totalVotes+=a.get(i).totalVotant;
+			totalVotes+=a.get(i).getTotalVotant();
 			System.out.println("-----------------------------------");
 		}
 		if (totalVotes<=0) {
@@ -43,7 +43,7 @@ public class GestionGroupes {
 		for(int i =0;i<a.size();i++) {
 			a.get(i).afficherVote();
 			totalSatis+= a.get(i).nbVotantsGagnant();
-			totalVotes+=a.get(i).totalVotant;
+			totalVotes+=a.get(i).getTotalVotant();
 			System.out.println("-----------------------------------");
 		}
 		if (totalVotes<=0) {
@@ -324,7 +324,7 @@ public class GestionGroupes {
 		for(int i =0;i<a.size();i++) {
 			a.get(i).afficherVote();
 			totalSatis+= a.get(i).nbVotantsGagnant();
-			totalVotes+=a.get(i).totalVotant;
+			totalVotes+=a.get(i).getTotalVotant();
 		}
 		System.out.println("total Votes satisfaits : " + totalSatis);
 		System.out.println("total Votants votes choisis : " + totalVotes);

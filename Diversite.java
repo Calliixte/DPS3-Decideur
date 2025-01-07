@@ -19,24 +19,24 @@ public class Diversite {
 		ArrayList<String> etiquettesPrises = new ArrayList<>();
 		ArrayList<Vote> suggeres = new ArrayList<>();
 		for (Vote vote : g.votes) {
-			if (budj-vote.estimBudj<0) { //si le vote coute trop cher par rapport a notre budget c'est tchao
+			if (budj-vote.getEstimBudget()<0) { //si le vote coute trop cher par rapport a notre budget c'est tchao
 				continue;
 			}
 			
 			//on cherche si le vote a un theme qui n'a pas encore été abordé, si ce n'est pas le cas on le traite pas
 			boolean etiquetteDejaUtilisee = true;
-			for(int i=0;i<vote.etiquettes.size();i++) {
-				if(!etiquettesPrises.contains(vote.etiquettes.get(i))){
+			for(int i=0;i<vote.getListeEtiquette().size();i++) {
+				if(!etiquettesPrises.contains(vote.getListeEtiquette().get(i))){
 					etiquetteDejaUtilisee=false;
 				}
 			}
 			
 			if(etiquetteDejaUtilisee) continue;
 			
-			for(int i=0;i<vote.etiquettes.size();i++) {
-				etiquettesPrises.add(vote.etiquettes.get(i));
+			for(int i=0;i<vote.getListeEtiquette().size();i++) {
+				etiquettesPrises.add(vote.getListeEtiquette().get(i));
 			}
-			budj-=vote.estimBudj;
+			budj-=vote.getEstimBudget();
 			suggeres.add(vote);
 		}
 		return suggeres;
@@ -55,24 +55,24 @@ public class Diversite {
 		ArrayList<String> etiquettesPrises = new ArrayList<>();
 		ArrayList<Vote> suggeres = new ArrayList<>();
 		for (Vote vote : g.votes) {
-			if (budj-vote.estimBudj<0) { //si le vote coute trop cher par rapport a notre budget c'est tchao
+			if (budj-vote.getEstimBudget()<0) { //si le vote coute trop cher par rapport a notre budget c'est tchao
 				continue;
 			}
 			
 			//on cherche si le vote a un theme qui n'a pas encore été abordé, si ce n'est pas le cas on le traite pas
 			boolean etiquetteDejaUtilisee = false;
-			for(int i=0;i<vote.etiquettes.size();i++) {
-				if(etiquettesPrises.contains(vote.etiquettes.get(i))){
+			for(int i=0;i<vote.getListeEtiquette().size();i++) {
+				if(etiquettesPrises.contains(vote.getListeEtiquette().get(i))){
 					etiquetteDejaUtilisee=true;
 				}
 			}
 			
 			if(etiquetteDejaUtilisee) continue;
 			
-			for(int i=0;i<vote.etiquettes.size();i++) {
-				etiquettesPrises.add(vote.etiquettes.get(i));
+			for(int i=0;i<vote.getListeEtiquette().size();i++) {
+				etiquettesPrises.add(vote.getListeEtiquette().get(i));
 			}
-			budj-=vote.estimBudj;
+			budj-=vote.getEstimBudget();
 			suggeres.add(vote);
 		}
 		return suggeres;
@@ -117,18 +117,18 @@ public class Diversite {
 		//s'il rentre pas on relance aussi sans le premier vote juste y'aura pas le premier vote avant
 		
 		boolean etiquetteDejaUtilisee = false;
-		for(int i=0;i<premierVote.etiquettes.size();i++) {
-			if(etiquettesPrises.contains(premierVote.etiquettes.get(i))){
+		for(int i=0;i<premierVote.getListeEtiquette().size();i++) {
+			if(etiquettesPrises.contains(premierVote.getListeEtiquette().get(i))){
 				etiquetteDejaUtilisee=true;
 			}
 		}
 		
-		if(!etiquetteDejaUtilisee && premierVote.estimBudj<g.BudgetAlloue) {
+		if(!etiquetteDejaUtilisee && premierVote.getEstimBudget()<g.BudgetAlloue) {
 			choixCas2.add(premierVote);
 			Groupe gCopieCas2 = new Groupe(gCopie);
-			gCopieCas2.BudgetAlloue -= premierVote.estimBudj;
+			gCopieCas2.BudgetAlloue -= premierVote.getEstimBudget();
 			ArrayList<String> nouvellesEtiquettesPrises = new ArrayList<>(etiquettesPrises);
-			for (String s : premierVote.etiquettes) {
+			for (String s : premierVote.getListeEtiquette()) {
 			    nouvellesEtiquettesPrises.add(s);
 			}
 			choixCas2.addAll(bruteForceExclusif(gCopieCas2, nouvellesEtiquettesPrises));
@@ -138,18 +138,18 @@ public class Diversite {
 		int nbEtiChx1=0;
 		int nbEtiChx2=0;
 		for(Vote v : choixCas1) {
-			if(v.choixGagnant == null) {
-				v.setChoixGagnant();
+			if(v.getChoixGagnant() == null) {
+				v.updateChoixGagnant();
 			}
-			for(String eti : v.etiquettes) {
+			for(String eti : v.getListeEtiquette()) {
 				nbEtiChx1++;
 			}
 		}
 		for(Vote v : choixCas2) {
-			if(v.choixGagnant == null) {
-				v.setChoixGagnant();
+			if(v.getChoixGagnant() == null) {
+				v.updateChoixGagnant();
 			}
-			for(String eti : v.etiquettes) {
+			for(String eti : v.getListeEtiquette()) {
 				nbEtiChx2++;
 			}
 		}

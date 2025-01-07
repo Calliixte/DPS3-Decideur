@@ -13,12 +13,12 @@ import org.json.JSONObject;
 import java.util.Random;
 
 public class Vote {
-	ArrayList<Choix> lesChoix;
-	ArrayList<String> etiquettes;
-	int idVote;
-	int totalVotant;
-	int estimBudj;
-	Choix choixGagnant;
+	private ArrayList<Choix> lesChoix;
+	private ArrayList<String> etiquettes;
+	private int idVote;
+	private int totalVotant;
+	private int estimBudget;
+	private Choix choixGagnant;
 	
 	public Vote() {
 		/*
@@ -42,7 +42,7 @@ public class Vote {
         this.lesChoix = new ArrayList<>(v.lesChoix);
         this.etiquettes = new ArrayList<>(v.etiquettes);
         this.totalVotant = v.totalVotant;
-        this.estimBudj = v.estimBudj;
+        this.estimBudget = v.estimBudget;
     }
 
     public Vote(int idVote, int idVotant, int idGroupe) {
@@ -62,7 +62,7 @@ public class Vote {
             this.idVote = j.getInt("idVote");
             
             // Remplir l'estimation budgétaire
-            this.estimBudj = j.getInt("evalBudget");
+            this.estimBudget = j.getInt("evalBudget");
             
             // Initialiser la liste des choix
             this.lesChoix = new ArrayList<>();
@@ -102,14 +102,61 @@ public class Vote {
             }
             
             // Déterminer le choix gagnant
-            setChoixGagnant();
+            updateChoixGagnant();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     
-    public void setChoixGagnant() {
+    
+    public int getIdVote() {
+    	return idVote;
+    }
+    
+    //On ne va jamais modifier l'idVote, donc pas besoin de setter
+    
+    public int getEstimBudget() {
+    	return estimBudget;
+    }
+    
+    public void setEstimBudget(int value) {
+    	estimBudget = value;
+    }
+    
+    public int getTotalVotant() {
+    	return totalVotant;
+    }
+    
+    public void setTotalVotant(int value) {
+    	totalVotant = value;
+    }
+    
+    public Choix getChoixGagnant() {
+    	return choixGagnant;
+    }
+    
+    public void setChoixGagnant(Choix value) {
+    	choixGagnant = value;
+    }
+    
+    public ArrayList<Choix> getLesChoix(){
+    	return lesChoix;
+    }
+    
+    public void setLesChoix(ArrayList<Choix> listeChoix){
+    	lesChoix = listeChoix;
+    }
+    
+    public ArrayList<String> getListeEtiquette(){
+    	return etiquettes;
+    }
+    
+    public void setListeEtiquette(ArrayList<String> listeEtiquette){
+    	etiquettes = listeEtiquette;
+    }
+    
+    public void updateChoixGagnant() {
 		/*
 		 * Arguments : null
 		 * Sortie : null
@@ -183,9 +230,9 @@ public class Vote {
 
         vote.totalVotant = 10 + random.nextInt(491); //total de votant entre 10 et 500
 
-        vote.estimBudj = 1000 + random.nextInt(9001); //budget entre 1000 et 10000
+        vote.estimBudget = 1000 + random.nextInt(9001); //budget entre 1000 et 10000
         
-        vote.setChoixGagnant();
+        vote.updateChoixGagnant();
         
         vote.idVote=-1; //idVote à -1 pour signaler que le vote n'appartient pas à la BD
         return vote;
@@ -199,7 +246,7 @@ public class Vote {
 		 */
         System.out.println("Vote Details:");
         System.out.println("Total Votants: " + totalVotant);
-        System.out.println("Estimation Budgetaire: " + estimBudj + " €");
+        System.out.println("Estimation Budgetaire: " + estimBudget + " €");
         System.out.println("Etiquettes : ");
         for(int i =0;i<etiquettes.size();i++) {
         	System.out.println(etiquettes.get(i) + " ");
@@ -239,7 +286,7 @@ public class Vote {
 
         if (responseCode == HttpURLConnection.HTTP_OK) {  // Vérification du code 200 OK
             System.out.println("Budget modifié !");
-            this.estimBudj=nvBudj;
+            this.estimBudget=nvBudj;
         } else {
             System.out.println("Échec de la modification du budget, code : " + responseCode);
         }

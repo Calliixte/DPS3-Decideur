@@ -16,14 +16,13 @@ public class FetchJSON {
 	public static int loginDecideur(String identifiant,String pass) throws IOException{
 		/*
 		 * Arguments : 
-		 * 		- idVote -> id du vote dont on veut les informations 
-		 * 		- idVotant -> id de la personne dont on veut le vote, ne sevira pas ici mais est necessaire à l'api
-		 * 		- idGroupe -> id du groupe dans lequel le vote est crée
+		 * 		- identifiant : l'identifiant (login ou email) de l'utilisateur
+		 * 		- pass : son mdp non hash
 		 * Sortie : 
-		 * 		- un objet JSON qui contient toutes les informations liées au vote
+		 * 		- l'id de l'utilisateur qui vient de se connecteur ou une erreur
 		 * Contenu de la fonction : 
-		 * 		- la fonction établit une connexion avec le serveur,envoie la requete Get, vérifie que le code de retour est le bon, puis convertit le contenu
-		 * 			obtenu en JSON et renvoie cet objet
+		 * 		- la fonction établit une connexion avec le serveur,envoie la requete Get, vérifie que le code de retour est le bon, puis renvoie le contenu de la 
+		 * 	page affichée (s'il n'y a pas d'erreur ce sera un nombre) et le convertit en entier
 		 */
 		JSONObject jsonVoulu = null;
 		int reponse =-1;
@@ -180,20 +179,6 @@ public class FetchJSON {
         connection.disconnect();
 		return jsonVoulu;
 		
-	}
-	public static void main(String[] args) {
-		try {
-			int idUser = loginDecideur("remib", "remi");
-			JSONObject j = recupJSONUtilisateur(idUser);
-			System.out.println("idutilisateur :" + j.getInt("idUtilisateur")); 
-			System.out.println("pseudo : " + j.getString("pseudo"));
-			System.out.println("nom : "+j.getString("nom"));
-			System.out.println("prenom : "+j.getString("prenom"));
-			System.out.println("lienpfp : "+j.getString("lienPhotoProfil"));
-		}catch(IOException e) {
-			System.out.println(e.getMessage());
-		}
-
 	}
 }
 

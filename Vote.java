@@ -16,6 +16,7 @@ import java.util.Random;
 public class Vote {
 	private ArrayList<Choix> lesChoix;
 	private ArrayList<String> etiquettes;
+	private String nomVote;
 	private int idVote;
 	private int totalVotant;
 	private int estimBudget;
@@ -60,7 +61,7 @@ public class Vote {
             JSONObject j = FetchJSON.recupJSONVote(idVote, idVotant);
             
             // Remplir l'identifiant du vote
-            this.idVote = j.getInt("idVote");
+            this.nomVote = j.getString("titreVote");
             
             // Remplir l'estimation budgétaire
             if(j.get("evalBudget") == "null") {
@@ -128,6 +129,14 @@ public class Vote {
     
     public void setEstimBudget(int value) {
     	estimBudget = value;
+    }
+    
+    public String getNomVote() {
+    	return nomVote;
+    }
+    
+    public void setNomVote(String value) {
+    	nomVote = value;
     }
     
     public int getTotalVotant() {
@@ -240,6 +249,8 @@ public class Vote {
         
         vote.updateChoixGagnant();
         
+        vote.nomVote="Vote de test";
+        
         vote.idVote=-1; //idVote à -1 pour signaler que le vote n'appartient pas à la BD
         return vote;
     }
@@ -251,6 +262,7 @@ public class Vote {
 		 * Contenu de la fonction : affiche un vote de maniere lisible pour un humain
 		 */
         System.out.println("Vote Details:");
+        System.out.println("Nom : "+nomVote);
         System.out.println("Total Votants: " + totalVotant);
         System.out.println("Estimation Budgetaire: " + estimBudget + " €");
         System.out.println("Etiquettes : ");
@@ -302,7 +314,6 @@ public class Vote {
 	public static void main(String[] args) {
 		Groupe g = new Groupe(1);
 		g.afficherGroupe();
-
 	}
 
 }

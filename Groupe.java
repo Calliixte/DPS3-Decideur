@@ -1,7 +1,11 @@
 package algos;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+
+import org.json.JSONObject;
 
 
 public class Groupe {
@@ -50,7 +54,32 @@ public class Groupe {
 			votes.add(v);
 		}
 	}
+	public Groupe(int idGroupe) {
+		/*
+		 * Arguments : 
+		 * 		-idGroupe l'identifiant dans la BD du groupe qu'on veut importer dans l'application java
+		 * Sortie (constructeur donc pas vraiment mais si): null 
+		 * Contenu de la fonction : crée un groupe a partir des données de la base de données
+		 */
+		try {
+			votes = new ArrayList<>();
+			JSONObject g = new JSONObject();
+			g = FetchJSON.recupJSONGroupe(idGroupe);
+			List<Object> listeIdVotes = g.getJSONArray("votes").toList();
+			for(int i=0;i<listeIdVotes.size();i++) {
+				int patch  = (int)listeIdVotes.get(i);
+				Vote v = new Vote(patch,1);
+				votes.add(v);
+			}
+			nomGroupe = g.getString("nomGroupe");
+			BudgetAlloue= 100000;
 
+		}catch(IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	
 	public Groupe(Groupe g) { 
 		/*
 		 * Arguments : 
@@ -110,6 +139,7 @@ public class Groupe {
 		 * 		- affichage stylisé d'un groupe, exclusivement pour l'application console décideur
 		 */
     	System.out.println("-----------------------------------");
+    	System.out.println(this.getNomGroupe());
 		for (int i=0; i <this.votes.size();i++) {
 			System.out.println("---------- Vote "+(i+1)+" ----------");
 			this.votes.get(i).afficherVote();

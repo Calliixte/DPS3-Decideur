@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -45,7 +46,7 @@ public class Vote {
         this.estimBudget = v.estimBudget;
     }
 
-    public Vote(int idVote, int idVotant, int idGroupe) {
+    public Vote(int idVote, int idVotant) {
 		/*
 		 * Arguments : 
 		 * 		- voir FetchJSON.recupJSONVote
@@ -56,13 +57,18 @@ public class Vote {
 		 */
         try {
             // Récupération du JSON via l'API
-            JSONObject j = FetchJSON.recupJSONVote(idVote, idVotant, idGroupe);
+            JSONObject j = FetchJSON.recupJSONVote(idVote, idVotant);
             
             // Remplir l'identifiant du vote
             this.idVote = j.getInt("idVote");
             
             // Remplir l'estimation budgétaire
-            this.estimBudget = j.getInt("evalBudget");
+            if(j.get("evalBudget") == "null") {
+                this.estimBudget = j.getInt("evalBudget");
+            }else {
+            	this.estimBudget = -1;
+            }
+
             
             // Initialiser la liste des choix
             this.lesChoix = new ArrayList<>();
@@ -293,5 +299,10 @@ public class Vote {
         
         connection.disconnect();
     }
+	public static void main(String[] args) {
+		Groupe g = new Groupe(1);
+		g.afficherGroupe();
+
+	}
 
 }

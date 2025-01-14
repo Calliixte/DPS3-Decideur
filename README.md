@@ -1,4 +1,4 @@
-# Projet de 1ère année BUT informatique
+# Projet de 2ème année BUT informatique
 ## Application Décideur liée au projet DPS3 
 
 Optimise selon différents algorithmes les choix de votes dans un groupe, crées depuis l'application web.
